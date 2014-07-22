@@ -17,14 +17,11 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
-import android.os.Binder;
 import android.os.IBinder;
-import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 public class PhonetopService extends Service {
 	static String tag = "PhonetopService";
@@ -138,6 +135,7 @@ public class PhonetopService extends Service {
 
 		makeView();
 		
+		mPhonetopServiceBinder = new PhonetopServiceBinder(this);
 		mPhonetopServiceBinder.setMouseWheelVolume(Util.getIntegerPreferences(this, "wheel"));
 		mPhonetopServiceBinder.setMouseSpeed(Util.getIntegerPreferences(this, "speed"));
 		mPhonetopServiceBinder.setMouseMapping(LEFT_BUTTON, Util.getIntegerPreferences(this, "btn_left"));
@@ -148,7 +146,7 @@ public class PhonetopService extends Service {
 		// view.setOnTouchListener(mViewTouchListener); //팝업뷰에 터치 리스너 등록
 		inputHandler = new InputHandler(this);
 		dr = new DisplayRotation(this);
-		mPhonetopServiceBinder = new PhonetopServiceBinder(this);
+		
 		startInputServer();
 	}
 
@@ -380,6 +378,7 @@ public class PhonetopService extends Service {
 		}
 		setAddedClient(0);
 		if(MainActivity.handler!=null)MainActivity.handler.sendEmptyMessage(UIHandler.SERVICE_CLOSE);
+		Util.removeAllPreferences(this);
 		super.onDestroy();
 	}
 

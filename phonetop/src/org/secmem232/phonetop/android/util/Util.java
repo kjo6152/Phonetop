@@ -1,5 +1,7 @@
 package org.secmem232.phonetop.android.util;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Locale;
 
 import android.content.Context;
@@ -8,18 +10,16 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class Util {
-
+	static final public String REVERSE_TETHERING_FILE = "/data/data/org.secmem232.phonetop/shared_prefs/isReverseTethering";
 	static final public String LOG_NAME = "PT_LOG";
 	static final public boolean DEBUG_MODE = true;
 
-	// �� �ҷ�����
 	static public String getStringPreferences(Context context, String key) {
 		SharedPreferences pref = context.getSharedPreferences("pref",
 				Context.MODE_PRIVATE);
 		return pref.getString(key, null);
 	}
 
-	// �� �����ϱ�
 	static public void saveStringPreferences(Context context, String key,
 			String value) {
 		SharedPreferences pref = context.getSharedPreferences("pref",
@@ -29,14 +29,12 @@ public class Util {
 		editor.commit();
 	}
 
-	// ������ �ҷ�����
 	static public int getIntegerPreferences(Context context, String key) {
 		SharedPreferences pref = context.getSharedPreferences("pref",
 				Context.MODE_PRIVATE);
 		return pref.getInt(key, 0);
 	}
 
-	// ������ �����ϱ�
 	static public void saveIntegerPreferences(Context context, String key,
 			int value) {
 		SharedPreferences pref = context.getSharedPreferences("pref",
@@ -47,21 +45,29 @@ public class Util {
 	}
 
 	static public boolean getBooleanPreferences(Context context, String key) {
-		SharedPreferences pref = context.getSharedPreferences("pref",
-				Context.MODE_PRIVATE);
-		return pref.getBoolean(key, false);
+		if(key.contentEquals("ReverseTethering")){
+			return getReverseTethering();
+		} else {
+			SharedPreferences pref = context.getSharedPreferences("pref",
+					Context.MODE_PRIVATE);
+			return pref.getBoolean(key, false);
+		}
 	}
 
 	static public void saveBooleanPreferences(Context context, String key,
 			boolean value) {
-		SharedPreferences pref = context.getSharedPreferences("pref",
-				Context.MODE_PRIVATE);
-		SharedPreferences.Editor editor = pref.edit();
-		editor.putBoolean(key, value);
-		editor.commit();
+		if(key.contentEquals("ReverseTethering")){
+			if(value)saveReverseTethering();
+			else removeReverseTethering();
+		} else {
+			SharedPreferences pref = context.getSharedPreferences("pref",
+					Context.MODE_PRIVATE);
+			SharedPreferences.Editor editor = pref.edit();
+			editor.putBoolean(key, value);
+			editor.commit();
+		}
 	}
 		
-	// ��(Key Data) �����ϱ�
 	static public void removePreferences(Context context, String key) {
 		SharedPreferences pref = context.getSharedPreferences("pref",
 				Context.MODE_PRIVATE);
@@ -70,13 +76,13 @@ public class Util {
 		editor.commit();
 	}
 
-	// ��(ALL Data) �����ϱ�
 	static public void removeAllPreferences(Context context) {
 		SharedPreferences pref = context.getSharedPreferences("pref",
 				Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = pref.edit();
 		editor.clear();
 		editor.commit();
+		removeReverseTethering();
 	}
 	
 	public static class InputMethod{
@@ -104,5 +110,25 @@ public class Util {
 	static public void makeLog(String message) {
 		if (DEBUG_MODE)
 			Log.d(LOG_NAME, message);
+	}
+	
+	static boolean saveReverseTethering(){
+		File reverseTethering = new File(REVERSE_TETHERING_FILE);
+		try {
+			reverseTethering.createNewFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	static boolean removeReverseTethering(){
+		File reverseTethering = new File(REVERSE_TETHERING_FILE);
+		return reverseTethering.delete();
+	}
+	static boolean getReverseTethering(){
+		File reverseTethering = new File(REVERSE_TETHERING_FILE);
+		return reverseTethering.exists();
 	}
 }
