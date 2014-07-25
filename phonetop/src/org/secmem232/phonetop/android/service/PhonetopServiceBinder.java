@@ -37,12 +37,12 @@ public class PhonetopServiceBinder extends Binder{
 	}
 	
 	public void startTetheringService(){
-		Util.saveIntegerPreferences(mPhonetopService, "ReverseTethering", 1);
+		Util.saveBooleanPreferences(mPhonetopService, "ReverseTethering", true);
 		Toast.makeText(mPhonetopService, "역테더링 연결되었습니다.", Toast.LENGTH_SHORT).show();
 	}
 	
 	public void endTetheringService(){
-		Util.saveIntegerPreferences(mPhonetopService, "ReverseTethering", 0);
+		Util.saveBooleanPreferences(mPhonetopService, "ReverseTethering", false);
 		Toast.makeText(mPhonetopService, "역테더링 해제 되었습니다.", Toast.LENGTH_SHORT).show();
 	}
 			
