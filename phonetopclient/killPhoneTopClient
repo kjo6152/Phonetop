@@ -1,0 +1,2 @@
+#This Script is Kill PhoneTopMiddleServer
+pkill -9 ic

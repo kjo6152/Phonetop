@@ -1,0 +1,7 @@
+#!/bin/sh
+#This Script is Run PhoneTopMiddleServer
+echo 'PhoneTop Client Running Wait...'
+/home/jiwon/workspace/workspace_Phonetop/PhoneTopDisplayClient/killPhoneTopClient
+/home/jiwon/workspace/workspace_Phonetop/PhoneTopDisplayClient/ic
+/bin/echo test > /home/jiwon/workspace/workspace_Phonetop/PhoneTopDisplayClient/testfile
+echo 'PhoneTop Client Run !'
