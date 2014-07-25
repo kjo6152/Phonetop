@@ -23,6 +23,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.android.phonetop.*;
+
 public class PhonetopService extends Service {
 	static String tag = "PhonetopService";
 	static final public int ORIENTATION_PORTRAIT = 0;
@@ -101,6 +103,9 @@ public class PhonetopService extends Service {
 	boolean viewAddFlag;
 	
 	DisplayRotation dr;
+	PhonetopDisplayManager mPhonetopDisplayManager;
+	PhonetopTetheringManager mPheontopTetheringManager;
+	
 	private ServerSocket server;
 	private Socket client;
 	@Override
@@ -144,8 +149,14 @@ public class PhonetopService extends Service {
 		mPhonetopServiceBinder.setMousePointerIcon(Util.getIntegerPreferences(this, "cursor"));
 		
 		// view.setOnTouchListener(mViewTouchListener); //팝업뷰에 터치 리스너 등록
+		
 		inputHandler = new InputHandler(this);
 		dr = new DisplayRotation(this);
+		mPhonetopDisplayManager = new PhonetopDisplayManager(this);
+		mPheontopTetheringManager = new PhonetopTetheringManager(this);
+		//Usb Display Server Open
+		mPhonetopDisplayManager.connectUsbDisplay("0.0.0.0");
+		mPheontopTetheringManager.setUsbTethering(true);
 		
 		startInputServer();
 	}
@@ -377,6 +388,7 @@ public class PhonetopService extends Service {
 			e.printStackTrace();
 		}
 		setAddedClient(0);
+		mPhonetopDisplayManager.disconnectUsbDisplay();
 		if(MainActivity.handler!=null)MainActivity.handler.sendEmptyMessage(UIHandler.SERVICE_CLOSE);
 		Util.removeAllPreferences(this);
 		super.onDestroy();
