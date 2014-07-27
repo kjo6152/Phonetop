@@ -132,6 +132,7 @@ public final class R {
         public static final int AppTheme=0x7f070001;
     }
     public static final class xml {
-        public static final int method=0x7f040000;
+        public static final int lint=0x7f040000;
+        public static final int method=0x7f040001;
     }
 }

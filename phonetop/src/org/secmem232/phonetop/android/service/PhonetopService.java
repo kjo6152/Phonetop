@@ -138,7 +138,9 @@ public class PhonetopService extends Service {
 
 	public void onDestroy() {
 		Log.d("PhonetopService", "onDestroy()");
-		inputEventHandler.stop();
+		if(inputEventHandler!=null){
+			inputEventHandler.stop();
+		}
 //		isEnd = true;
 		if (view != null) // 서비스 종료시 뷰 제거. *중요 : 뷰를 꼭 제거 해야함.
 		{

@@ -83,12 +83,13 @@ public class PhonetopInputHandler {
 
 	int wheelSpeed;
 
-	public PhonetopServiceBinder mPhonetopServiceBinder;
+//	public PhonetopServiceBinder mPhonetopServiceBinder;
 
 	public PhonetopInputHandler(Context context,Socket client, MouseView view) {
 		// TODO Auto-generated constructor stub
 		this.context = context;
 		this.client = client;
+//		this.mPhonetopServiceBinder = mPhonetopServiceBinder;
 		this.view = view;
 
 		wheelSpeed = Util.getIntegerPreferences(context, "wheel");
@@ -103,12 +104,13 @@ public class PhonetopInputHandler {
 		if (btnWheel < 0)
 			btnWheel = 2;
 
-		mPhonetopServiceBinder.setMouseWheelVolume(Util.getIntegerPreferences(context, "wheel"));
-		mPhonetopServiceBinder.setMouseSpeed(Util.getIntegerPreferences(context, "speed"));
-		mPhonetopServiceBinder.setMouseMapping(LEFT_BUTTON, Util.getIntegerPreferences(context, "btn_left"));
-		mPhonetopServiceBinder.setMouseMapping(RIGHT_BUTTON, Util.getIntegerPreferences(context, "btn_right"));
-		mPhonetopServiceBinder.setMouseMapping(WHEEL_BUTTON, Util.getIntegerPreferences(context, "btn_wheel"));
-		mPhonetopServiceBinder.setMousePointerIcon(Util.getIntegerPreferences(context, "cursor"));
+//		
+//		mPhonetopServiceBinder.setMouseWheelVolume(Util.getIntegerPreferences(context, "wheel"));
+//		mPhonetopServiceBinder.setMouseSpeed(Util.getIntegerPreferences(context, "speed"));
+//		mPhonetopServiceBinder.setMouseMapping(LEFT_BUTTON, Util.getIntegerPreferences(context, "btn_left"));
+//		mPhonetopServiceBinder.setMouseMapping(RIGHT_BUTTON, Util.getIntegerPreferences(context, "btn_right"));
+//		mPhonetopServiceBinder.setMouseMapping(WHEEL_BUTTON, Util.getIntegerPreferences(context, "btn_wheel"));
+//		mPhonetopServiceBinder.setMousePointerIcon(Util.getIntegerPreferences(context, "cursor"));
 
 		inputHandler = new InputHandler(context);
 	}
@@ -207,7 +209,7 @@ public class PhonetopInputHandler {
 			code = buffer.getShort(10);
 			value = buffer.getInt(12);
 
-//			Log.d("TCP/IPtest", "type : " + type + ",code : " + code+ ",value : " + value);
+			Log.d("TCP/IPtest", "type : " + type + ",code : " + code+ ",value : " + value);
 			if (view == null)
 				return;
 
@@ -267,6 +269,7 @@ public class PhonetopInputHandler {
 			}			
 			inputHandler.sendEvent(3, 0, view.getValueX());// ABS_X:0 EV_ABS:3
 			inputHandler.sendEvent(3, 1, view.getValueY());// ABS_Y:1
+			Log.d("TCP/IPtest", "x_posotion : " + view.getValueX() + ",y_position : " + view.getValueY());
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

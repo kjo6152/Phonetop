@@ -38,6 +38,8 @@ public class MouseView extends ViewGroup {
 	private int myWheelVolume;
 	private int myWindowMode;
 	
+	private int bar_size = 145;
+	
 	Context context;
 	public MouseView(Context context) {
 		super(context);
@@ -181,7 +183,7 @@ public class MouseView extends ViewGroup {
 			x=displayWidth;
 			return;
 		}		
-		this.x+=x_value*this.speedFlag;		
+		this.x+=x_value;//*this.speedFlag;		
 	}
 	
 	public void setRelativeCurser_Y(int y_value){
@@ -195,7 +197,7 @@ public class MouseView extends ViewGroup {
 		if(myWindowMode==ORIENTATION_LANDSCAPE){
 			y_value=-y_value;
 		}
-		this.y+=y_value*this.speedFlag;
+		this.y+=y_value;//*this.speedFlag;
 	}
 
 
