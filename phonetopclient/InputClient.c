@@ -89,7 +89,7 @@ void *mouse_function() {
 	struct input_event event;
 	int i;
 
-	int fd = open("/dev/input/event8", O_RDWR);
+	int fd = open("/dev/input/event3", O_RDWR);
 
 	if (!fd) {
 		printf("Errro open mouse:%s\n", strerror(errno));
