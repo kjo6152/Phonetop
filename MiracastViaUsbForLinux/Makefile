@@ -1,6 +1,6 @@
 CC = g++
 TARGET = main
-OBJS = main.cpp rtsp.cpp socket.cpp stringutils.cpp
+OBJS = main.cpp rtsp.cpp RtspClient.cpp stringutils.cpp input.cpp
 CURRENT_DIR = $(shell pwd)
 
 #turbojpeg library include and link

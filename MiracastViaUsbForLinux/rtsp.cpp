@@ -13,7 +13,7 @@
 #include <sstream>
 #include "rtsp.h"
 #include "stringutils.h"
-#include "socket.h"
+#include "RtspClient.h"
 
 using namespace std;
 
@@ -123,7 +123,7 @@ string RtspPacket::toString() {
 	return result + "\r\n";
 }
 
-void RtspPacket::sendM1(int socket) {
+string RtspPacket::getM1Message() {
 	RtspPacket *mRtspPacket = new RtspPacket();
 	RtspBody mRtspBody = RtspBody("","");
 	mRtspPacket->response = true;
@@ -131,9 +131,9 @@ void RtspPacket::sendM1(int socket) {
 	mRtspPacket->addBody(mRtspBody);
 	mRtspBody.setBody("public","org,wfa,wfd1.0, SET_PARAMETER,GET_PARAMETER");
 	mRtspPacket->addBody(mRtspBody);
-	SendRtspData(socket,mRtspPacket->toString());
+	return mRtspPacket->toString();
 }
-void RtspPacket::sendM2(int socket) {
+string RtspPacket::getM2Message() {
 	RtspPacket *mRtspPacket = new RtspPacket();
 	RtspBody mRtspBody = RtspBody("","");
 	mRtspPacket->response = false;
@@ -142,9 +142,9 @@ void RtspPacket::sendM2(int socket) {
 	mRtspPacket->addBody(mRtspBody);
 	mRtspBody.setBody("require","org.wfa.wfd1.0");
 	mRtspPacket->addBody(mRtspBody);
-	SendRtspData(socket,mRtspPacket->toString());
+	return mRtspPacket->toString();
 }
-void RtspPacket::sendM3(int socket) {
+string RtspPacket::getM3Message() {
 	RtspPacket *mRtspPacket = new RtspPacket();
 	RtspBody mRtspBody = RtspBody("","");
 	mRtspPacket->response = true;
@@ -163,10 +163,9 @@ void RtspPacket::sendM3(int socket) {
 	mRtspPacket->addBody(mRtspBody);
 	mRtspBody.setBody("Cseq",this->cseq);
 	mRtspPacket->addBody(mRtspBody);
-	SendRtspData(socket,mRtspPacket->toString());
-	SendRtspData(socket,content);
+	return mRtspPacket->toString()+content;
 }
-void RtspPacket::sendM6(int socket) {
+string RtspPacket::getM6Message() {
 	RtspPacket *mRtspPacket = new RtspPacket();
 	RtspBody mRtspBody = RtspBody("","");
 	mRtspPacket->response = false;
@@ -175,9 +174,9 @@ void RtspPacket::sendM6(int socket) {
 	mRtspPacket->addBody(mRtspBody);
 	mRtspBody.setBody("transport","RTP/AVP/UDP;unicast;client_port=24030");
 	mRtspPacket->addBody(mRtspBody);
-	SendRtspData(socket,mRtspPacket->toString());
+	return mRtspPacket->toString();
 }
-void RtspPacket::sendM7(int socket) {
+string RtspPacket::getM7Message() {
 	RtspPacket *mRtspPacket = new RtspPacket();
 	RtspBody mRtspBody = RtspBody("","");
 	mRtspPacket->response = false;
@@ -186,21 +185,21 @@ void RtspPacket::sendM7(int socket) {
 	mRtspPacket->addBody(mRtspBody);
 	mRtspBody.setBody("session",this->session);
 	mRtspPacket->addBody(mRtspBody);
-	SendRtspData(socket,mRtspPacket->toString());
+	return mRtspPacket->toString();
 }
-void RtspPacket::sendOKResponse(int socket) {
+string RtspPacket::getOKMessage() {
 	RtspPacket *mRtspPacket = new RtspPacket();
 	RtspBody mRtspBody = RtspBody("","");
 	mRtspPacket->response = true;
 	mRtspBody.setBody("Cseq",this->cseq);
 	mRtspPacket->addBody(mRtspBody);
-	SendRtspData(socket,mRtspPacket->toString());
+	return mRtspPacket->toString();
 }
-void RtspPacket::sendConnection(int socket){
+string RtspPacket::getConnectionMessage(){
 	RtspPacket *mRtspPacket = new RtspPacket();
 	RtspBody mRtspBody = RtspBody("","");
 	mRtspPacket->response = true;
 	mRtspBody.setBody("Cseq",this->cseq);
 	mRtspPacket->addBody(mRtspBody);
-	SendRtspData(socket,mRtspPacket->toString());
+	return mRtspPacket->toString();
 }

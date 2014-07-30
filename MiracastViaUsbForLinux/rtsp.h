@@ -65,13 +65,13 @@ public:
 	void addBody(RtspBody mRtspBody);
 	string toString();
 
-	void sendM1(int socket);
-	void sendM2(int socket);
-	void sendM3(int socket);
-	void sendM6(int socket);
-	void sendM7(int socket);
-	void sendOKResponse(int socket);
-	void sendConnection(int socket);
+	string getM1Message();
+	string getM2Message();
+	string getM3Message();
+	string getM6Message();
+	string getM7Message();
+	string getOKMessage();
+	string getConnectionMessage();
 };
 
 #endif

@@ -163,9 +163,9 @@ main() {
 	char buf[4];
 
 	//프로세스분기 및 종료
-	pid_t pid = fork();
-	if (pid > 0)
-		return;
+//	pid_t pid = fork();
+//	if (pid > 0)
+//		return;
 
 
 	printf("Hi, I am the client\n");
