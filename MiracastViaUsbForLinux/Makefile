@@ -1,5 +1,5 @@
 CC = g++
-TARGET = main
+TARGET = phonetopclient
 OBJS = main.cpp rtsp.cpp RtspClient.cpp stringutils.cpp input.cpp
 CURRENT_DIR = $(shell pwd)
 
