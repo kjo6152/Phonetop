@@ -1,8 +1,0 @@
-#This Script is Run PhoneTop ReverseTethering
-echo 'Reverse tethering running...'
-echo 1 > /proc/sys/net/ipv4/ip_forward
-iptables -P FORWARD DROP
-iptables -A FORWARD -o eth0 -j ACCEPT
-iptables -A FORWARD -o usb0 -j ACCEPT
-iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-ifconfig usb0 192.168.42.55 up

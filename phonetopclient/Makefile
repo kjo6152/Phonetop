@@ -1,10 +1,10 @@
-CC = gcc
-TARGET = ic
-OBJS = InputClient.c
+CC = g++
+TARGET = phonetopclient
+OBJS = main.cpp rtsp.cpp RtspClient.cpp stringutils.cpp input.cpp
 CURRENT_DIR = $(shell pwd)
 
 #turbojpeg library include and link
-LIBS = -lpthread
+LIBS = -lpthread -std=c++11
 
 all : $(TARGET)
 
