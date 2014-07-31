@@ -56,7 +56,7 @@ void closeInputWithoutRevertPermission(){
 }
 
 int sendNativeEvent(int uinput_fd, uint16_t type, uint16_t code, int32_t value){
-	LOGI(LOGTAG, "Input Receive!!!.");
+//	LOGI(LOGTAG, "Input Receive!!!.");
 
 	return suinput_write(uinput_fd, type, code, value);
 }

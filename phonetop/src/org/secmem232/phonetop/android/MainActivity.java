@@ -69,18 +69,14 @@ public class MainActivity extends Activity {
 					
 					//서비스는 돌아가고 있는데 액티비티가 destroy된 후 다시 crate되는 것이라면
 					//기존에 addedClient에서 값을 확인하여 연결중인지, 연결됨인지 확인하여 UI에 적용한다.
-					if(Util.getIntegerPreferences(MainActivity.this, "addedClient")>=1){
-						sendMessageHandelr(UIHandler.SERVICE_CONNECTED);
-					}else sendMessageHandelr(UIHandler.SERVICE_CONNECTING);
-					
-					Util.saveBooleanPreferences(MainActivity.this, "sw", isChecked);
+					if(Util.getBooleanPreferences(MainActivity.this, "isConnected"))sendMessageHandelr(UIHandler.SERVICE_CONNECTED);
+					else sendMessageHandelr(UIHandler.SERVICE_CONNECTING);
 				} else {
 					// 컨넥션 unbind - 서비스 stop - UI 변경 - UI 상태 저장 - 컨넥션 null로 변경 순으로 진행
 					// 스위치 온과 반대 순서로 진행된다.
 					unbindService(phonetopServiceConnection);
 					stopService(new Intent(MainActivity.this,PhonetopService.class));
 					sendMessageHandelr(UIHandler.SERVICE_CLOSE);
-					Util.saveBooleanPreferences(MainActivity.this, "sw", isChecked);
 					phonetopServiceConnection = null;
 				}
 			}
@@ -200,8 +196,8 @@ public class MainActivity extends Activity {
 	 */
 	public void restoreUI(){
 		if(checkServiceRunning()){
-			sw.setChecked(Util.getBooleanPreferences(MainActivity.this, "sw"));
-			if(Util.getIntegerPreferences(MainActivity.this, "addedClient")>=1){
+			sw.setChecked(true);
+			if(Util.getBooleanPreferences(MainActivity.this, "isConnected")){
 				mouseCb.setChecked(Util.getBooleanPreferences(MainActivity.this, "mouseCb"));
 				keyboardCb.setChecked(Util.getBooleanPreferences(MainActivity.this, "keyboardCb"));
 				monitorCb.setChecked(Util.getBooleanPreferences(MainActivity.this, "monitorCb"));
@@ -232,6 +228,7 @@ public class MainActivity extends Activity {
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		if(phonetopServiceConnection!=null)unbindService(phonetopServiceConnection);
+		handler = null;
 		Log.i(tag, "onDestroy()");
 		super.onDestroy();
 	}

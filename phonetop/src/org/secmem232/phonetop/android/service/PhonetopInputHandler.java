@@ -14,7 +14,8 @@ import android.content.Context;
 import android.util.Log;
 
 public class PhonetopInputHandler {
-
+	private static String tag = "PhonetopInputHandler";
+	
 	static final public byte  START_MOUSE_SERVICE = 11;
 	static final public byte  END_MOUSE_SERVICE = 12;
 	static final public byte  START_KEYBOARD_SERVICE = 13;
@@ -29,11 +30,13 @@ public class PhonetopInputHandler {
 	static final public byte  SET_KEYBOARD_MAPPING = 22;
 	static final public byte  SET_MONITOR_ORIENTATION = 23;
 
-	static final public byte NONE_DEVICE = 4;
-	static final public byte INPUT_KEYBOARD = 1;
-	static final public byte INPUT_MOUSE = 2;
-	static final public byte INPUT_ALLDEVICE = 3;
-
+	static final public byte INPUT_MOUSE_START = 1;
+	static final public byte INPUT_MOUSE_SLEEP = 2;
+	static final public byte INPUT_KEYBOARD_START = 3;
+	static final public byte INPUT_KEYBOARD_SLEEP = 4;
+	static final public byte INPUT_MONITOR_START = 5;
+	static final public byte INPUT_MONITOR_SLEEP = 6;
+	
 	static final public byte OUTPUT_MONITOR = 1;
 	static final public byte UTIL_THETHERING = 1;
 
@@ -83,13 +86,11 @@ public class PhonetopInputHandler {
 
 	int wheelSpeed;
 
-//	public PhonetopServiceBinder mPhonetopServiceBinder;
 
 	public PhonetopInputHandler(Context context,Socket client, MouseView view) {
 		// TODO Auto-generated constructor stub
 		this.context = context;
 		this.client = client;
-//		this.mPhonetopServiceBinder = mPhonetopServiceBinder;
 		this.view = view;
 
 		wheelSpeed = Util.getIntegerPreferences(context, "wheel");
@@ -104,15 +105,8 @@ public class PhonetopInputHandler {
 		if (btnWheel < 0)
 			btnWheel = 2;
 
-//		
-//		mPhonetopServiceBinder.setMouseWheelVolume(Util.getIntegerPreferences(context, "wheel"));
-//		mPhonetopServiceBinder.setMouseSpeed(Util.getIntegerPreferences(context, "speed"));
-//		mPhonetopServiceBinder.setMouseMapping(LEFT_BUTTON, Util.getIntegerPreferences(context, "btn_left"));
-//		mPhonetopServiceBinder.setMouseMapping(RIGHT_BUTTON, Util.getIntegerPreferences(context, "btn_right"));
-//		mPhonetopServiceBinder.setMouseMapping(WHEEL_BUTTON, Util.getIntegerPreferences(context, "btn_wheel"));
-//		mPhonetopServiceBinder.setMousePointerIcon(Util.getIntegerPreferences(context, "cursor"));
-
 		inputHandler = new InputHandler(context);
+		
 	}
 
 	public void start() {
@@ -121,7 +115,6 @@ public class PhonetopInputHandler {
 			in = client.getInputStream();
 			out = client.getOutputStream();
 			buffer = ByteBuffer.allocate(300);
-			out.write(4);
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -130,11 +123,11 @@ public class PhonetopInputHandler {
 		inputHandler.open();
 
 		while (!isEnd) {
-//			Log.d("TCP/IPtest", "before buttonEvents");
+			Log.i(tag, "while (!isEnd)");
 			buttonEvents();
 		}
-
 		inputHandler.close();
+		
 	}
 
 	public void executeMouseFunction(int num) {
@@ -178,16 +171,9 @@ public class PhonetopInputHandler {
 		}
 	}
 
-	public void setEventType(boolean isMouse,boolean isKeyboard){
+	public void setEventType(byte EventType){
 		try {
-			if(!isMouse&&!isKeyboard)
-				out.write(NONE_DEVICE);
-			else if(isMouse&&isKeyboard)
-				out.write(INPUT_ALLDEVICE);
-			else if(isMouse)
-				out.write(INPUT_MOUSE);
-			else//(isKeyboard)
-				out.write(INPUT_KEYBOARD);
+			out.write(EventType);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -199,7 +185,7 @@ public class PhonetopInputHandler {
 			//32bit용
 			int ret = in.read(a, 0, 16);
 			if(ret<=0){
-				isEnd = false;
+				isEnd = true;
 				return;
 			}
 			buffer.rewind();
@@ -209,7 +195,8 @@ public class PhonetopInputHandler {
 			code = buffer.getShort(10);
 			value = buffer.getInt(12);
 
-			Log.d("TCP/IPtest", "type : " + type + ",code : " + code+ ",value : " + value);
+//			Log.d("TCP/IPtest", "type : " + type + ",code : " + code+ ",value : " + value);
+			
 			if (view == null)
 				return;
 

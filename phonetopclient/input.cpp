@@ -26,8 +26,6 @@ void InputClient::runInputClient() {
 	KeyboardThread.detach();
 	thread MouseThread(&InputClient::sendMouseEvent, this);
 	MouseThread.detach();
-//	thread ModeThread(&InputClient::receiveMode, this);
-	receiveMode();
 }
 bool InputClient::isInputConnected() {
 	if (InputSocket > 0)
@@ -158,36 +156,6 @@ void InputClient::sendMouseEvent() {
 			event.code = htons(event.code);
 			event.value = htonl(event.value);
 			write(this->InputSocket, &event, sizeof(struct input_event));
-		}
-	}
-	closeInputClient();
-}
-
-void InputClient::receiveMode() {
-	cout << "receiveMode"	<< endl;
-	char mode;
-	int ret = 0;
-	while (true) {
-		ret = read(this->InputSocket, &mode, 1);
-		if (ret <= 0) {
-			printf("failed to read input event from input device");
-			break;
-		}
-
-		printf("mode : %d, ret : %d\n", mode, ret);
-
-		if (mode == NONE_DEVICE) {
-			isSleepMouse = true;
-			isSleepKeyboard = true;
-		} else if (mode == INPUT_ALLDEVICE) {
-			isSleepMouse = false;
-			isSleepKeyboard = false;
-		} else if (mode == INPUT_MOUSE) {
-			isSleepMouse = false;
-			isSleepKeyboard = true;
-		} else if (mode == INPUT_KEYBOARD) {
-			isSleepMouse = true;
-			isSleepKeyboard = false;
 		}
 	}
 	closeInputClient();

@@ -176,7 +176,7 @@ string RtspPacket::getM6Message() {
 	mRtspPacket->addBody(mRtspBody);
 	return mRtspPacket->toString();
 }
-string RtspPacket::getM7Message() {
+string RtspPacket::getPlayMessage() {
 	RtspPacket *mRtspPacket = new RtspPacket();
 	RtspBody mRtspBody = RtspBody("","");
 	mRtspPacket->response = false;
@@ -201,5 +201,16 @@ string RtspPacket::getConnectionMessage(){
 	mRtspPacket->response = true;
 	mRtspBody.setBody("Cseq",this->cseq);
 	mRtspPacket->addBody(mRtspBody);
+	return mRtspPacket->toString();
+}
+string RtspPacket::getPauseMessage() {
+	RtspPacket *mRtspPacket = new RtspPacket();
+	RtspBody mRtspBody = RtspBody("","");
+	mRtspPacket->response = false;
+	mRtspPacket->header->setHeader("PAUSE","rtsp://192.168.42.129/wfd1.0/streamid=0");
+	mRtspBody.setBody("Cseq","312");
+	mRtspPacket->addBody(mRtspBody);
+//	mRtspBody.setBody("session",this->session);
+//	mRtspPacket->addBody(mRtspBody);
 	return mRtspPacket->toString();
 }

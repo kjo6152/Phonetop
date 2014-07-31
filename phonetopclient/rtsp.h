@@ -69,9 +69,10 @@ public:
 	string getM2Message();
 	string getM3Message();
 	string getM6Message();
-	string getM7Message();
+	string getPlayMessage();
 	string getOKMessage();
 	string getConnectionMessage();
+	string getPauseMessage();
 };
 
 #endif

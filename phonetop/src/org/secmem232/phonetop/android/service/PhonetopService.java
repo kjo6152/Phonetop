@@ -30,8 +30,6 @@ public class PhonetopService extends Service {
 	static final public int ORIENTATION_PORTRAIT = 0;
 	static final public int ORIENTATION_LANDSCAPE = 1;
 
-	//클라이언트 추가 유/무 판별 변수
-	int addedClient = 0;
 	//실제 마우스를 표현 할 최상위뷰
 	public MouseView view;
 
@@ -45,7 +43,7 @@ public class PhonetopService extends Service {
 	PhonetopTetheringManager mPheontopTetheringManager;
 	
 	boolean viewAddFlag;
-
+	public boolean isConnected = false;
 	DisplayRotation dr;
 	private ServerSocket server;
 	private Socket client;
@@ -89,30 +87,17 @@ public class PhonetopService extends Service {
 				try {
 					server = new ServerSocket(6155);
 					client = server.accept();
-					if(MainActivity.handler!=null){
-						addedClient++;
-						setAddedClient(addedClient);
-					}
+					if(MainActivity.handler!=null)MainActivity.handler.sendEmptyMessage(UIHandler.SERVICE_CONNECTED);
+					Util.saveBooleanPreferences(PhonetopService.this, "isConnected",true);
 					inputEventHandler = new PhonetopInputHandler(PhonetopService.this,client,view);
-					runInputService();
+					inputEventHandler.start();
+					Log.i(tag, "inputEventHandler end");
+					if(MainActivity.handler!=null)MainActivity.handler.sendEmptyMessage(UIHandler.SERVICE_CLOSE);
+					stopSelf();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			}
-		}.start();
-	}
-
-
-	private void runInputService() {
-		new Thread() {
-			@Override
-			public void run() {
-				if (client == null) {
-					Log.d("TCP/IPtest", "Socket is NULL");
-					return;
-				}				
-				inputEventHandler.start();				
 			}
 		}.start();
 	}
@@ -138,16 +123,17 @@ public class PhonetopService extends Service {
 
 	public void onDestroy() {
 		Log.d("PhonetopService", "onDestroy()");
+		//InputService 종료
 		if(inputEventHandler!=null){
 			inputEventHandler.stop();
 		}
-//		isEnd = true;
-		if (view != null) // 서비스 종료시 뷰 제거. *중요 : 뷰를 꼭 제거 해야함.
+		// 서비스 종료시 뷰 제거. *중요 : 뷰를 꼭 제거 해야함.
+		if (view != null) 
 		{
 			((WindowManager) getSystemService(WINDOW_SERVICE)).removeView(view);
 			view = null;
 		}
-		view = null;
+		//소켓 종료
 		try {
 			if (client != null)
 				client.close();
@@ -156,17 +142,11 @@ public class PhonetopService extends Service {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		setAddedClient(0);
+		//UsbDisplay 종료
 		mPhonetopDisplayManager.disconnectUsbDisplay();
-		if(MainActivity.handler!=null)MainActivity.handler.sendEmptyMessage(UIHandler.SERVICE_CLOSE);
+		//UI 변경
+		Util.saveBooleanPreferences(PhonetopService.this, "isConnected",false);
 		super.onDestroy();
-	}
-
-	public void setAddedClient(int ClientCnt){
-		Util.saveIntegerPreferences(PhonetopService.this, "addedClient", ClientCnt);
-		if(ClientCnt>=1){
-			MainActivity.handler.sendEmptyMessage(UIHandler.SERVICE_CONNECTED);
-		}
 	}
 
 	@Override

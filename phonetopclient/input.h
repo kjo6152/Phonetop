@@ -46,7 +46,6 @@ public:
 	void runInputClient();
 	void sendKeyboardEvent();
 	void sendMouseEvent();
-	void receiveMode();
 	void closeInputClient();
 };
 

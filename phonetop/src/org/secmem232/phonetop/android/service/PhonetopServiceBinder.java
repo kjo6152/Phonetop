@@ -11,29 +11,27 @@ public class PhonetopServiceBinder extends Binder{
 	public PhonetopServiceBinder(PhonetopService phonetopService){
 		mPhonetopService = phonetopService;
 	}
-
+	public boolean isConnected(){
+		return mPhonetopService.isConnected;
+	}
 	public void setMouseViewVisible(boolean flag){
 		if(flag) mPhonetopService.setVisibleMouseView(View.VISIBLE); 
 		else mPhonetopService.setVisibleMouseView(View.INVISIBLE);
 	}
 
 	public void setInputMode(boolean isMouse,boolean isKeyboard){
-		mPhonetopService.inputEventHandler.setEventType(isMouse, isKeyboard);
+		if(isMouse)mPhonetopService.inputEventHandler.setEventType(PhonetopInputHandler.INPUT_MOUSE_START);
+		else mPhonetopService.inputEventHandler.setEventType(PhonetopInputHandler.INPUT_MOUSE_SLEEP);
+		if(isKeyboard)mPhonetopService.inputEventHandler.setEventType(PhonetopInputHandler.INPUT_KEYBOARD_START);
+		else mPhonetopService.inputEventHandler.setEventType(PhonetopInputHandler.INPUT_KEYBOARD_SLEEP);
+		
 	}
-	public void startKeyboardService(){
-
-	}
-
-	public void endKeyboardService(){
-
-	}
-
 	public void startMonitorService(){
-		//지원
+		mPhonetopService.inputEventHandler.setEventType(PhonetopInputHandler.INPUT_MONITOR_START);
 	}
 
 	public void endMonitorService(){
-		//지원
+		mPhonetopService.inputEventHandler.setEventType(PhonetopInputHandler.INPUT_MONITOR_SLEEP);
 	}
 
 	public void startTetheringService(){

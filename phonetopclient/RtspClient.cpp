@@ -30,10 +30,10 @@ string RtspClient::ReadRtspLine() {
 	}
 	if (ret <= 0) {
 		if (cnt == 0) {
-			cout << "socket read error" << endl;
+//			cout << "socket read error" << endl;
 		}
 	}
-	cout << "ReadRtspLine : " << string(buf);
+//	cout << "ReadRtspLine : " << string(buf);
 	return string(buf);
 }
 RtspPacket RtspClient::ReadRtspPacket() {
@@ -77,7 +77,7 @@ void RtspClient::ReceiveRtspData() {
 				RtspState = 2;
 			} else if (mRtspPacket.header->method.compare(RTSP_GET_PARAMETER)
 					== 0) {
-				if (RtspState == 7) {
+				if (RtspState == 8) {
 					SendRtspData(mRtspPacket.getConnectionMessage());
 				} else {
 					SendRtspData(mRtspPacket.getM3Message());
@@ -94,10 +94,14 @@ void RtspClient::ReceiveRtspData() {
 					SendRtspData(mRtspPacket.getM6Message());
 					RtspState = 6;
 				}
-			} else if (mRtspPacket.header->method.compare(RTSP_VERSION) == 0) {
+			}
+			else if (mRtspPacket.header->method.compare(RTSP_VERSION) == 0) {
 				if (RtspState == 6) {
-					SendRtspData(mRtspPacket.getM7Message());
+					SendRtspData(mRtspPacket.getPlayMessage());
 					RtspState = 7;
+				}else if(RtspState==7){
+					SendRtspData(mRtspPacket.getPauseMessage());
+					RtspState = 8;
 				}
 			}
 		} catch (const char *message) {
@@ -185,10 +189,12 @@ void RtspClient::ReceiveRtpData() {
 	while (true) {
 		ReadSize = recvfrom(this->RtpScoket, RTPBuffer + RemainSize,
 				4096 - RemainSize, 0, (struct sockaddr *) &addr, &addr_len);
+
+		if(ReadSize<=0)break;
 		total += ReadSize;
 
 		RemainSize = extractTSData(ReadSize + RemainSize);
-		cout << "Total Rtp Receive Data : " << total << endl;
+//		cout << "Total Rtp Receive Data : " << total << endl;
 	}
 	closeRtspClient();
 }
@@ -198,12 +204,12 @@ int RtspClient::extractTSData(int RemainSize) {
 	int ptr = 0;
 	while (true) {
 		if (RTPBuffer[ptr] == 0x80 && RTPBuffer[ptr + 1] == 0x21) {
-			cout << "extractTSData : RTP Header" << endl;
+//			cout << "extractTSData : RTP Header" << endl;
 			ptr += 12;
 			RemainSize -= 12;
 			continue;
 		} else {
-			cout << "extractTSData : TS Packet" << endl;
+//			cout << "extractTSData : TS Packet" << endl;
 			if (RemainSize < 188) {
 				memcpy(RTPBuffer, RTPBuffer + ptr, RemainSize);
 				return RemainSize;
@@ -248,4 +254,13 @@ void RtspClient::closeRtspClient() {
 		close(this->RtspSocket);
 		this->RtspSocket = -1;
 	}
+}
+
+void RtspClient::requestPause(){
+	RtspPacket *mRtspPacket = new RtspPacket();
+	SendRtspData(mRtspPacket->getPauseMessage());
+}
+void RtspClient::requestPlay(){
+	RtspPacket *mRtspPacket = new RtspPacket();
+	SendRtspData(mRtspPacket->getPlayMessage());
 }

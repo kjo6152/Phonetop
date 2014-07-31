@@ -11,6 +11,10 @@ public class PhonetopServiceConnection implements ServiceConnection{
 		// TODO Auto-generated method stub
 		ptservice = (PhonetopServiceBinder) service;
 	}
+	public boolean isConnected(){
+		if(ptservice!=null)ptservice.isConnected();
+		return false;
+	}
 	@Override
 	public void onServiceDisconnected(ComponentName arg0) {
 		// TODO Auto-generated method stub
@@ -24,14 +28,6 @@ public class PhonetopServiceConnection implements ServiceConnection{
 	public void setInputMode(boolean isMouse,boolean isKeyboard){
 		if(ptservice!=null)ptservice.setInputMode(isMouse,isKeyboard);
 	}
-	public void startKeyboardService(){
-		if(ptservice!=null)ptservice.startKeyboardService();
-	}
-	
-	public void endKeyboardService(){
-		if(ptservice!=null)ptservice.endKeyboardService();
-	}
-	
 	public void startMonitorService(){
 		if(ptservice!=null)ptservice.startMonitorService();
 	}

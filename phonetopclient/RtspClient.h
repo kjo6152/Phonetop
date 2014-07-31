@@ -20,6 +20,8 @@ public:
 	unsigned int addr_len;
 	unsigned char RTPBuffer[4096];
 
+	string session;
+
 	RtspClient(){
 		RtspSocket = -1;
 		RtpScoket = -1;
@@ -28,6 +30,8 @@ public:
 		addr_len = sizeof(addr);
 		RtspRunning = false;
 		RtpRunning = false;
+
+		session = string("");
 	}
 
 	bool isRtspConnected();
@@ -42,6 +46,8 @@ public:
 	void OpenRtpClient();
 	int extractTSData(int RemainSize);
 	void runRtspClient();
+	void requestPause();
+	void requestPlay();
 	void closeRtspClient();
 };
 
