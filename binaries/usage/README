@@ -1,0 +1,21 @@
+Phonetop project use miracast and target LG nexus5.
+We can get binaries for nexus devices at 'https://developers.google.com/android/nexus/drivers?csw=1'
+However Google and LG omited binaries about HDCP. So if you don't add this binaries, you can't execute phonetop project.
+
+How to add binaries
+
+Step 1. Get Omitted Nexus5 Binaries
+You can get omitted binaries nexus5 Factory image or in this directory.
+If you get your nexus 5, you have to run script_pull file.
+
+Step 2. Copy Binaries To AOSP vendor binaries directory
+Copy binaries to your AOSP vendor binaries directory.
+Directory is '<AOSP root>/vendor/lge/hammerhead/proprietary'.
+
+Step 3. Modify 'device-partial.mk' File
+Modify 'device-partial.mk' file in '<AOSP root>/vendor/lge/hammerhead'.
+Add content in file 'script_partial' to 'device-partial.mk' File
+or change file device-partial.mk in '<AOSP root>/vendor/lge/hammerhead' to device-partial.mk in this project directory
+
+Step 4. Build Framework
+Build your AOSP. Then you can get system.img file added omitted binaries.

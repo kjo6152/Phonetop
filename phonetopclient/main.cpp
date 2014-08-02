@@ -77,10 +77,11 @@ int main() {
 	signal(SIGILL, closeApp);
 
 	//프로세스분기 및 종료
-//	pid_t pid = fork();
-//	if (pid > 0)
-//		return 0;
+	pid_t pid = fork();
+	if (pid > 0)
+		return 0;
 
+//	sleep(5);
 
 	mRtspClient = new RtspClient();
 	mInputClient = new InputClient();

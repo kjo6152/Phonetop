@@ -1,0 +1,17 @@
+adb pull system/app/OmaDmclient.apk
+adb pull system/etc/DxHDCP.cfg
+adb pull system/vendor/bin/vss_init
+adb pull system/vendor/firmware/discretix/dxhdcp2.b00
+adb pull system/vendor/firmware/discretix/dxhdcp2.b01
+adb pull system/vendor/firmware/discretix/dxhdcp2.b02
+adb pull system/vendor/firmware/discretix/dxhdcp2.b03
+adb pull system/vendor/firmware/discretix/dxhdcp2.mdt
+adb pull system/vendor/lib/libDxHdcp.so
+adb pull system/vendor/lib/libvdmengine.so
+adb pull system/vendor/lib/libvdmfumo.so
+adb pull system/vendor/lib/libvss_common_core.so
+adb pull system/vendor/lib/libvss_common_idl.so
+adb pull system/vendor/lib/libvss_common_iface.so
+adb pull system/vendor/lib/libvss_nv_core.so
+adb pull system/vendor/lib/libvss_nv_idl.so
+adb pull system/vendor/lib/libvss_nv_iface.so
