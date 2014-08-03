@@ -43,7 +43,7 @@ iptables -P FORWARD DROP
 iptables -A FORWARD -o eth0 -j ACCEPT
 iptables -A FORWARD -o usb0 -j ACCEPT
 iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-#ifconfig usb0 192.168.42.55 up
+ifconfig usb0 192.168.42.55 up
 
 # Step 4. run Phonetop client
 #Following script is run Phonetop client

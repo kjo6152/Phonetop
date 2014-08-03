@@ -9,18 +9,19 @@ import org.secmem232.phonetop.android.MouseView;
 import org.secmem232.phonetop.android.UIHandler;
 import org.secmem232.phonetop.android.util.Util;
 
-import com.android.phonetop.PhonetopDisplayManager;
-import com.android.phonetop.PhonetopTetheringManager;
-
 import android.app.Service;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+
+import com.android.phonetop.PhonetopDisplayManager;
+import com.android.phonetop.PhonetopTetheringManager;
 
 public class PhonetopService extends Service {
 	static String tag = "PhonetopService";
@@ -38,7 +39,9 @@ public class PhonetopService extends Service {
 	public PhonetopServiceBinder mPhonetopServiceBinder;
 	//실제 이벤트 관련한 기능 수행 핸들러.
 	public PhonetopInputHandler inputEventHandler;
-
+	public String DefaultInputMethod = "";
+	public String EnableInputMethod = "";
+	
 	PhonetopDisplayManager mPhonetopDisplayManager;
 	PhonetopTetheringManager mPheontopTetheringManager;
 	
@@ -76,6 +79,7 @@ public class PhonetopService extends Service {
 		//Usb Display Server Open
 		mPhonetopDisplayManager.connectUsbDisplay("0.0.0.0");
 		mPheontopTetheringManager.setUsbTethering(true);
+		setInputMethod();
 		startInputServer();
 	}
 
@@ -102,6 +106,16 @@ public class PhonetopService extends Service {
 		}.start();
 	}
 
+	public void setInputMethod(){
+		DefaultInputMethod = Settings.Secure.getString( this.getContentResolver(),Settings.Secure.DEFAULT_INPUT_METHOD);
+		EnableInputMethod = Settings.Secure.getString( this.getContentResolver(),Settings.Secure.ENABLED_INPUT_METHODS);
+		Settings.Secure.putString( this.getContentResolver(),Settings.Secure.ENABLED_INPUT_METHODS,EnableInputMethod+":org.secmem232.phonetop/.android.ime.HardKeyboard");
+		Settings.Secure.putString( this.getContentResolver(),Settings.Secure.DEFAULT_INPUT_METHOD,"org.secmem232.phonetop/.android.ime.HardKeyboard");
+	}
+	public void restoreInputMethod(){
+		Settings.Secure.putString( this.getContentResolver(),Settings.Secure.ENABLED_INPUT_METHODS,EnableInputMethod);
+		Settings.Secure.putString( this.getContentResolver(),Settings.Secure.DEFAULT_INPUT_METHOD,DefaultInputMethod);
+	}
 	public void makeView(){
 		WindowManager.LayoutParams params = new WindowManager.LayoutParams(
 				WindowManager.LayoutParams.MATCH_PARENT,
@@ -147,6 +161,7 @@ public class PhonetopService extends Service {
 		mPheontopTetheringManager.setUsbTethering(false);
 		//UI 변경
 		Util.saveBooleanPreferences(PhonetopService.this, "isConnected",false);
+		restoreInputMethod();
 		super.onDestroy();
 	}
 
