@@ -95,7 +95,7 @@ void InputClient::sendKeyboardEvent() {
 			sleep(1);
 		}
 		if (read(this->KeyboardFd, &event, sizeof(struct input_event)) < 0) {
-			printf("failed to read input event from input device");
+			printf("failed to read input event from Keyboard input device\n");
 			if (errno == EINTR)
 				continue;
 			break;
@@ -133,7 +133,7 @@ void InputClient::sendMouseEvent() {
 			sleep(1);
 		}
 		if (read(this->MouseFd, &event, sizeof(struct input_event)) < 0) {
-			printf("failed to read input event from input device");
+			printf("failed to read input event from Mouse input device\n");
 			if (errno == EINTR)
 				continue;
 			break;
