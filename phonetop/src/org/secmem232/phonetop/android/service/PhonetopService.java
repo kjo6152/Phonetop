@@ -178,6 +178,7 @@ public class PhonetopService extends Service {
             	view.settingOrientation(MouseView.ORIENTATION_PORTRAIT);
             	break;
          }
+         if(inputEventHandler==null)return;
          inputEventHandler.sendEvent(3, 0, view.getValueX());// ABS_X:0 EV_ABS:3
          inputEventHandler.sendEvent(3, 1, view.getValueY());// ABS_Y:1
 	}

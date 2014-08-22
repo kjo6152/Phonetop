@@ -213,7 +213,8 @@ public class PreferencesActivity extends Activity {
 						PreferencesActivity.this, R.style.AlertDialogTheme);
 				AlertDialog.Builder ab = new AlertDialog.Builder(cw);
 				ab.setTitle("Monitor rotation");
-				ab.setSingleChoiceItems(items, 0,
+				
+				ab.setSingleChoiceItems(items, getWindowManager().getDefaultDisplay().getRotation(),
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog,
 									int whichButton) {
