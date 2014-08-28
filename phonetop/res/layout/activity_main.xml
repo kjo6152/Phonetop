@@ -286,6 +286,39 @@
 				        android:textSize="20sp"/>	        
 		    	</RelativeLayout>    
 		    </LinearLayout>
+		    <LinearLayout 
+		        android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="vertical"
+			    android:paddingBottom="2px"
+			    android:background="#888888"
+		        >
+		        <TextView 
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:paddingLeft="15dp"
+	            android:paddingTop="2dp"
+	            android:paddingRight="2dp"
+	            android:paddingBottom="2dp"
+	            android:textSize="15sp"
+	            android:text="changeDpi"
+	            android:background="#444444"/>
+		    	<RelativeLayout
+		        	android:id="@+id/changeDpi" 
+			        android:layout_width="match_parent"
+			        android:layout_height="65dp"
+			        android:background="@drawable/row_background"
+			        android:padding="10dp">			           
+			        <TextView
+				        android:layout_width="match_parent"
+				        android:layout_height="wrap_content"
+				        android:layout_marginLeft="10dp" 
+				        android:textColor="#ffffff"
+				        android:text="changeDpi" 
+				        android:layout_centerVertical="true"
+				        android:textSize="20sp"/>	        
+		    	</RelativeLayout>
+		    </LinearLayout>
 	        <TextView 
 	            android:layout_width="match_parent"
 	            android:layout_height="wrap_content"
@@ -317,6 +350,7 @@
 				        android:layout_centerVertical="true"
 				        android:textSize="20sp"/>	        
 		    	</RelativeLayout>    
+		    	
 		    </LinearLayout>
 	        <LinearLayout
 			    android:layout_width="match_parent"

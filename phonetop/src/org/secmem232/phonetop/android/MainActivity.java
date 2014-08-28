@@ -1,8 +1,8 @@
 package org.secmem232.phonetop.android;
 
 import org.secmem232.phonetop.R;
-import org.secmem232.phonetop.android.service.PhonetopServiceConnection;
 import org.secmem232.phonetop.android.service.PhonetopService;
+import org.secmem232.phonetop.android.service.PhonetopServiceConnection;
 import org.secmem232.phonetop.android.util.Util;
 
 import android.app.Activity;
@@ -10,6 +10,7 @@ import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,6 +31,7 @@ public class MainActivity extends Activity {
 	private ViewGroup monitorLayout;
 	private ViewGroup tetheringLayout;
 	private ViewGroup preferenceLayout;
+	private ViewGroup chageDpiLayout;
 	// private ViewGroup helpLayout;
 	public CheckBox mouseCb;
 	public CheckBox keyboardCb;
@@ -43,6 +45,9 @@ public class MainActivity extends Activity {
 	public Switch sw;
 
 	static public Handler handler;
+	
+	SharedPreferences pref ;
+   SharedPreferences.Editor editor;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +66,14 @@ public class MainActivity extends Activity {
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
 				// TODO Auto-generated method stub
+				ActivityManager am = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
 				if (isChecked) {
+					//dpi 변경 시작.
+					pref = getSharedPreferences("startPhoneTop", Context.MODE_WORLD_READABLE);
+					editor = pref.edit();
+					editor.putString("start", "1");
+					editor.commit();
+					am.killBackgroundProcesses ("com.android.launcher3");
 					//컨넥션을 생성하고 서비스를 실행시키고 컨넥션에 바인드한다.
 					phonetopServiceConnection = new PhonetopServiceConnection();
 					startService(new Intent(MainActivity.this,PhonetopService.class));
@@ -72,6 +84,12 @@ public class MainActivity extends Activity {
 					if(Util.getBooleanPreferences(MainActivity.this, "isConnected"))sendMessageHandelr(UIHandler.SERVICE_CONNECTED);
 					else sendMessageHandelr(UIHandler.SERVICE_CONNECTING);
 				} else {
+					// dpi 종료
+					editor = pref.edit();
+					editor.putString("start", "0");
+					editor.commit();
+					am.killBackgroundProcesses ("com.android.launcher3");
+					
 					// 컨넥션 unbind - 서비스 stop - UI 변경 - UI 상태 저장 - 컨넥션 null로 변경 순으로 진행
 					// 스위치 온과 반대 순서로 진행된다.
 					unbindService(phonetopServiceConnection);
@@ -174,6 +192,20 @@ public class MainActivity extends Activity {
 			}
 		});
 
+		// dpi 변경 부분.........intent로 넘겨.
+		chageDpiLayout = (ViewGroup) findViewById(R.id.changeDpi);
+		chageDpiLayout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+				Intent i = new Intent(MainActivity.this,
+						ChangeDpiActivity.class);
+				startActivity(i);
+			}
+		});
+		//
 		preferenceLayout = (ViewGroup) findViewById(R.id.preference);
 		preferenceLayout.setOnClickListener(new OnClickListener() {
 			@Override

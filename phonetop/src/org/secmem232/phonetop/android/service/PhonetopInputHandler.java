@@ -255,7 +255,7 @@ public class PhonetopInputHandler {
 				inputHandler.sendEvent(type, code, value);
 			}			
 			inputHandler.sendEvent(3, 0, view.getValueX());// ABS_X:0 EV_ABS:3
-			inputHandler.sendEvent(3, 1, view.getValueY());// ABS_Y:1
+			inputHandler.sendEvent(3, 1, (int)((double)view.getValueY()*0.91));// ABS_Y:1
 			Log.d("TCP/IPtest", "x_posotion : " + view.getValueX() + ",y_position : " + view.getValueY());
 
 		} catch (IOException e) {

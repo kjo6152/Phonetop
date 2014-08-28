@@ -3,14 +3,23 @@ package org.secmem232.phonetop.android.service;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.secmem232.phonetop.android.MainActivity;
 import org.secmem232.phonetop.android.MouseView;
 import org.secmem232.phonetop.android.UIHandler;
 import org.secmem232.phonetop.android.util.Util;
 
+import android.app.ActivityManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
@@ -19,6 +28,11 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.android.phonetop.PhonetopDisplayManager;
 import com.android.phonetop.PhonetopTetheringManager;
@@ -50,6 +64,8 @@ public class PhonetopService extends Service {
 	DisplayRotation dr;
 	private ServerSocket server;
 	private Socket client;
+	
+
 	@Override
 	public IBinder onBind(Intent intent) {
 		return mPhonetopServiceBinder;
@@ -66,6 +82,7 @@ public class PhonetopService extends Service {
 		// TODO Auto-generated method stub
 		super.onCreate();
 		Log.i(tag, "service oncreate");
+
 
 		//마우스뷰 생성
 		view = new MouseView(this); // MainActivity.view=view;
@@ -162,6 +179,8 @@ public class PhonetopService extends Service {
 		//UI 변경
 		Util.saveBooleanPreferences(PhonetopService.this, "isConnected",false);
 		restoreInputMethod();
+		
+
 		super.onDestroy();
 	}
 

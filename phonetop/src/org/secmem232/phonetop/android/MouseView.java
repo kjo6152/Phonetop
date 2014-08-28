@@ -183,7 +183,7 @@ public class MouseView extends ViewGroup {
 			x=displayWidth;
 			return;
 		}		
-		this.x+=x_value;//*this.speedFlag;		
+		this.x+=x_value*this.speedFlag;		
 	}
 	
 	public void setRelativeCurser_Y(int y_value){
@@ -197,7 +197,7 @@ public class MouseView extends ViewGroup {
 		if(myWindowMode==ORIENTATION_LANDSCAPE){
 			y_value=-y_value;
 		}
-		this.y+=y_value;//*this.speedFlag;
+		this.y+=y_value*this.speedFlag;
 	}
 
 
@@ -207,9 +207,9 @@ public class MouseView extends ViewGroup {
 		
 		canvas.drawColor(Color.TRANSPARENT);
 		if(myWindowMode==ORIENTATION_LANDSCAPE){
-			cursor.setBounds(x, displayHeight-y, x+cursor.getIntrinsicWidth(), displayHeight-y+cursor.getIntrinsicHeight());
+			cursor.setBounds(x, displayHeight-y, x+(int)(cursor.getIntrinsicWidth()*0.3), displayHeight-y+(int)(cursor.getIntrinsicHeight()*0.3));
 		}else{
-			cursor.setBounds(x, y, x+cursor.getIntrinsicWidth(), y+cursor.getIntrinsicHeight());	
+			cursor.setBounds(x, y, x+(int)(cursor.getIntrinsicWidth()*0.3), y+(int)(cursor.getIntrinsicHeight()*0.3));	
 		}
 		cursor.draw(canvas);
 	}
