@@ -128,11 +128,7 @@ public class Hangul {
 		public static final int PIEUP_SIOS = 12612;
 	}
 	
-	/**
-	 * Hangul 'Moeum' codes
-	 * @author Taeho Kim
-	 *
-	 */
+
 	public class Moeum{
 		/**
 		 * Stands for hangul '?? (U+1161)
