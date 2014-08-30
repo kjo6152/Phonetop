@@ -4,7 +4,6 @@
 	<classpathentry kind="src" path="frameworks/base/phonetop/java"/>
 	<classpathentry kind="src" path="frameworks/base/services/java"/>
 	<classpathentry kind="src" path="frameworks/base/wifi/java"/>
-	<classpathentry kind="src" path="frameworks/frameworks/base/core/java/android/content/res"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
