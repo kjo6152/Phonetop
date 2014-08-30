@@ -42,6 +42,7 @@ public class PhonetopService extends Service {
 	/**
 	 * 화면 세로/가로 상황에 따른 고유값 
 	 */
+	public static boolean isFirst=false;
 	static final public int ORIENTATION_PORTRAIT = 0;
 	static final public int ORIENTATION_LANDSCAPE = 1;
 

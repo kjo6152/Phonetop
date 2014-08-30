@@ -238,10 +238,10 @@ public class PhonetopInputHandler {
 				} else if (code == 8) {
 					if (value > 0) {// 휠아래로
 						for(int i=0;i<=this.wheelSpeed;i++)
-						inputHandler.keyStroke(103);
+						inputHandler.keyStroke(105);
 					} else if (value < 0) {// 휠위로
 						for(int i=0;i<=this.wheelSpeed;i++)
-						inputHandler.keyStroke(108);
+						inputHandler.keyStroke(106);
 					}
 					//Util.makeToast(this, "Wheel : "+wheelSpeed, Toast.LENGTH_SHORT);
 					return;

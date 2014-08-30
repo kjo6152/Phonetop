@@ -1,0 +1,63 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:orientation="vertical"
+    >
+  <LinearLayout
+        android:id="@+id/preference"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical"
+	    android:paddingBottom="2px"
+	    android:background="#888888">
+	    
+	    <RelativeLayout 
+	        android:layout_width="match_parent"	        
+	        android:layout_height="wrap_content"
+	        android:background="#396685"
+	        android:paddingTop="5dp"
+	        android:paddingRight="10dp"
+	        android:paddingBottom="5dp"
+	        android:paddingLeft="0dp">
+	        
+	        <ImageView 
+	            android:id="@+id/back_image"
+	            android:layout_width="50dp"
+		        android:layout_height="40dp"
+		        android:src="@drawable/icon_back"
+		        android:layout_marginRight="10dp"
+		        android:layout_marginLeft="5dp"
+		        android:layout_centerVertical="true"
+		        android:layout_alignParentLeft="true"/>       
+	        <TextView
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_toRightOf="@id/back_image" 
+		        android:textColor="#ffffff"
+		        android:text="ChangeDpi" 
+		        android:layout_centerVertical="true"
+		        android:textSize="20sp"/>	        
+    	</RelativeLayout>
+    	 <TextView 
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:paddingLeft="15dp"
+	            android:paddingTop="2dp"
+	            android:paddingRight="2dp"
+	            android:paddingBottom="2dp"
+	            android:textSize="15sp"
+	            android:text="AppList"
+	            android:background="#444444"/>    
+    </LinearLayout>
+    <LinearLayout 
+        android:layout_width="match_parent"
+    	 android:layout_height="wrap_content" 
+        >
+    <ListView
+        android:id="@+id/applist"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+	 </LinearLayout>
+
+</LinearLayout>

@@ -67,14 +67,18 @@ public class MainActivity extends Activity {
 					boolean isChecked) {
 				// TODO Auto-generated method stub
 				ActivityManager am = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
+			
 				if (isChecked) {
-					//dpi 변경 시작.
+					
+				
+					
 					pref = getSharedPreferences("startPhoneTop", Context.MODE_WORLD_READABLE);
 					editor = pref.edit();
 					editor.putString("start", "1");
 					editor.commit();
 					am.killBackgroundProcesses ("com.android.launcher3");
 					//컨넥션을 생성하고 서비스를 실행시키고 컨넥션에 바인드한다.
+					PhonetopService.isFirst = true;  
 					phonetopServiceConnection = new PhonetopServiceConnection();
 					startService(new Intent(MainActivity.this,PhonetopService.class));
 					bindService(new Intent(MainActivity.this,PhonetopService.class), phonetopServiceConnection, Context.BIND_AUTO_CREATE);
@@ -84,6 +88,7 @@ public class MainActivity extends Activity {
 					if(Util.getBooleanPreferences(MainActivity.this, "isConnected"))sendMessageHandelr(UIHandler.SERVICE_CONNECTED);
 					else sendMessageHandelr(UIHandler.SERVICE_CONNECTING);
 				} else {
+					
 					// dpi 종료
 					editor = pref.edit();
 					editor.putString("start", "0");
@@ -92,6 +97,7 @@ public class MainActivity extends Activity {
 					
 					// 컨넥션 unbind - 서비스 stop - UI 변경 - UI 상태 저장 - 컨넥션 null로 변경 순으로 진행
 					// 스위치 온과 반대 순서로 진행된다.
+					PhonetopService.isFirst = false;  
 					unbindService(phonetopServiceConnection);
 					stopService(new Intent(MainActivity.this,PhonetopService.class));
 					sendMessageHandelr(UIHandler.SERVICE_CLOSE);

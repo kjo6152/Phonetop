@@ -251,61 +251,11 @@
 	            android:paddingRight="2dp"
 	            android:paddingBottom="2dp"
 	            android:textSize="15sp"
-	            android:text="keyboard"
+	            android:text="Monitor"
 	            android:background="#444444"/>
 		    <!-- 키보드 키 맵핑  -->
-	        <LinearLayout
-			    android:layout_width="match_parent"
-			    android:layout_height="wrap_content"
-			    android:orientation="vertical"
-			    android:paddingBottom="2px"
-			    android:background="#888888">
-			    <RelativeLayout
-		        	android:id="@+id/keyboard_mapping" 
-			        android:layout_width="match_parent"
-			        android:layout_height="wrap_content"
-			        android:background="@drawable/row_background"
-			        android:padding="10dp">
-			        <ImageView 
-			            android:id="@+id/image_keyboard_mapping"
-			            android:layout_width="22dp"
-				        android:layout_height="22dp"
-				        android:src="@drawable/icon_next"
-				        android:layout_marginRight="10dp"
-				        android:layout_marginLeft="5dp"
-				        android:layout_centerVertical="true"
-				        android:layout_alignParentRight="true"/> 
-				    <LinearLayout 
-				        android:layout_width="match_parent"
-				        android:layout_height="wrap_content"
-				        android:orientation="vertical"
-				        android:layout_toLeftOf="@id/image_keyboard_mapping"
-				        android:layout_centerVertical="true">
-				        <TextView
-					        android:layout_width="match_parent"
-					        android:layout_height="wrap_content"					          
-					        android:textColor="#ffffff"
-					        android:text="Key mapping" 				        
-					        android:textSize="20sp"/>
-				        <TextView
-					        android:layout_width="match_parent"
-					        android:layout_height="wrap_content"
-					        android:textColor="#888888"
-					        android:text="키보드의 키 동작을 변경할 수 있습니다." 				        
-					        android:textSize="13sp"/>
-				    </LinearLayout>     
-		    	</RelativeLayout>    
-		    </LinearLayout>
-	        <TextView 
-	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content"
-	            android:paddingLeft="15dp"
-	            android:paddingTop="2dp"
-	            android:paddingRight="2dp"
-	            android:paddingBottom="2dp"
-	            android:textSize="15sp"
-	            android:text="monitor"
-	            android:background="#444444"/>
+	       
+	        
 	        <!-- 모니터 회전  -->
 	        <LinearLayout
 			    android:layout_width="match_parent"
@@ -350,16 +300,7 @@
 		    	</RelativeLayout>    
 		    </LinearLayout>
 	        
-	        <TextView 
-	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content"
-	            android:paddingLeft="15dp"
-	            android:paddingTop="2dp"
-	            android:paddingRight="2dp"
-	            android:paddingBottom="2dp"
-	            android:textSize="15sp"
-	            android:text="reverse tethering"
-	            android:background="#444444"/>    
+	            
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

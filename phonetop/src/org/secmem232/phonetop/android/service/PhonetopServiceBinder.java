@@ -31,6 +31,26 @@ public class PhonetopServiceBinder extends Binder{
 	}
 	public void startMonitorService(){
 		mPhonetopService.inputEventHandler.setEventType(PhonetopInputHandler.INPUT_MONITOR_START);
+		
+		if(PhonetopService.isFirst){
+			PhonetopService.isFirst=false;
+			Thread startMonitorThread = new Thread(){
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					try {
+						Thread.sleep(1000);
+						mPhonetopService.inputEventHandler.setEventType(PhonetopInputHandler.INPUT_MONITOR_SLEEP);
+						Thread.sleep(2000);
+						mPhonetopService.inputEventHandler.setEventType(PhonetopInputHandler.INPUT_MONITOR_START);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			};
+			startMonitorThread.start();
+		}
 	}
 
 	public void endMonitorService(){
