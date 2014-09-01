@@ -58,19 +58,12 @@ public class PhonetopServiceBinder extends Binder{
 	}
 
 	public void startTetheringService(){
-		File TetheringFile = new File("/data/data/org.secmem232.phonetop/shared_prefs/isReverseTethering");
-		try {
-			if(!TetheringFile.exists())TetheringFile.createNewFile();
-        } catch (IOException e) {
-	        // TODO Auto-generated catch block
-	        e.printStackTrace();
-        }
+		Util.saveReverseTethering();
 		Toast.makeText(mPhonetopService, "역테더링 연결되었습니다.", Toast.LENGTH_SHORT).show();
 	}
 
 	public void endTetheringService(){
-		File TetheringFile = new File("/data/data/org.secmem232.phonetop/shared_prefs/isReverseTethering");
-		if(TetheringFile.exists())TetheringFile.delete();
+		Util.removeReverseTethering();
 		Toast.makeText(mPhonetopService, "역테더링 해제 되었습니다.", Toast.LENGTH_SHORT).show();
 	}
 

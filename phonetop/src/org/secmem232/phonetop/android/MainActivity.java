@@ -1,5 +1,7 @@
 package org.secmem232.phonetop.android;
 
+import java.io.File;
+
 import org.secmem232.phonetop.R;
 import org.secmem232.phonetop.android.service.PhonetopService;
 import org.secmem232.phonetop.android.service.PhonetopServiceConnection;
@@ -70,9 +72,6 @@ public class MainActivity extends Activity {
 				ActivityManager am = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
 			
 				if (isChecked) {
-					
-				
-					
 					pref = getSharedPreferences("startPhoneTop", Context.MODE_WORLD_READABLE);
 					editor = pref.edit();
 					editor.putString("start", "1");
@@ -190,7 +189,6 @@ public class MainActivity extends Activity {
 				} else {
 					if(phonetopServiceConnection!=null)phonetopServiceConnection.endTetheringService();
 				}
-				Util.saveBooleanPreferences(MainActivity.this, "tetheringCb", isChecked);
 			}
 		});
 		tetheringLayout = (ViewGroup) findViewById(R.id.reverse_tethering);
@@ -245,7 +243,7 @@ public class MainActivity extends Activity {
 				mouseCb.setChecked(Util.getBooleanPreferences(MainActivity.this, "mouseCb"));
 				keyboardCb.setChecked(Util.getBooleanPreferences(MainActivity.this, "keyboardCb"));
 				monitorCb.setChecked(Util.getBooleanPreferences(MainActivity.this, "monitorCb"));
-				tetheringCb.setChecked(Util.getBooleanPreferences(MainActivity.this, "tetheringCb"));
+				tetheringCb.setChecked(Util.getReverseTethering());
 			}
 		}
 	}
