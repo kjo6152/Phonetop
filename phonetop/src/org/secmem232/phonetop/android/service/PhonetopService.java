@@ -162,7 +162,7 @@ public class PhonetopService extends Service {
 		}
 		//UsbDisplay 종료
 		mPhonetopDisplayManager.disconnectUsbDisplay();
-//		mPheontopTetheringManager.setUsbTethering(false);
+		mPheontopTetheringManager.setUsbTethering(false);
 		//UI 변경
 		Util.saveBooleanPreferences(PhonetopService.this, "isConnected",false);
 		Util.removeReverseTethering();
