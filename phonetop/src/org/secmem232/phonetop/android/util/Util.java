@@ -112,7 +112,7 @@ public class Util {
 			Log.d(LOG_NAME, message);
 	}
 	
-	static boolean saveReverseTethering(){
+	public static boolean saveReverseTethering(){
 		File reverseTethering = new File(REVERSE_TETHERING_FILE);
 		try {
 			reverseTethering.createNewFile();
@@ -123,11 +123,11 @@ public class Util {
 		}
 		return true;
 	}
-	static boolean removeReverseTethering(){
+	public static boolean removeReverseTethering(){
 		File reverseTethering = new File(REVERSE_TETHERING_FILE);
 		return reverseTethering.delete();
 	}
-	static boolean getReverseTethering(){
+	public static boolean getReverseTethering(){
 		File reverseTethering = new File(REVERSE_TETHERING_FILE);
 		return reverseTethering.exists();
 	}

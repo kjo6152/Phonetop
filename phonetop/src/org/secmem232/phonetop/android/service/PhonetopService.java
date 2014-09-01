@@ -1,5 +1,6 @@
 package org.secmem232.phonetop.android.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -176,9 +177,12 @@ public class PhonetopService extends Service {
 		}
 		//UsbDisplay 종료
 		mPhonetopDisplayManager.disconnectUsbDisplay();
-		mPheontopTetheringManager.setUsbTethering(false);
+//		mPheontopTetheringManager.setUsbTethering(false);
 		//UI 변경
 		Util.saveBooleanPreferences(PhonetopService.this, "isConnected",false);
+		Util.removeReverseTethering();
+		//teterhing 파일 삭제
+		
 		restoreInputMethod();
 		
 

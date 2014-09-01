@@ -164,18 +164,4 @@ public class CommandLine {
 
 		return retval;
 	}
-
-	public static boolean isDriverExists(Context context) {
-		File file;
-		try {
-			// Check IDC
-			file = new File("/system/usr/idc/passu.idc");
-			if (!file.exists())
-				return false;
-			else
-				return true;
-		} catch (Exception e) {
-			return false;
-		}
-	}
 }
