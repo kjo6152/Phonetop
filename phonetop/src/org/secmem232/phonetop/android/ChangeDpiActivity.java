@@ -21,6 +21,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -54,7 +55,8 @@ public class ChangeDpiActivity extends Activity implements OnItemClickListener {
    TreeMap<String,Double> sortAppCountInfo;
    ArrayList<String> checkPackageInfo;
    
-	String [] SystemApp = {
+	String [] SystemApp = { "org.secmem232.phonetop","com.android.packageinstaller", "com.google.android.gms", "android", "com.lge.update","com.android.location.fused",
+			"jp.co.omronsoft.openwnn","com.android.smspush","com.android.tag","com.android.externalstorage","com.redbend.vdmc",
 			"com.android.systemui", "com.android.soundrecorder",	"com.android.voicedialer",
 			"com.android.defcontainer", "com.android.inputmethod.latin","com.android.proxyhandler",
 			"com.android.htmlviewer", "com.android.bluetooth",	"com.android.inputdevices",
@@ -63,7 +65,7 @@ public class ChangeDpiActivity extends Activity implements OnItemClickListener {
 			"com.android.vpndialogs"	,"com.android.providers",	"com.android.provision",
 			"com.android.pacprocessor",  	"com.android.certinstaller",	"com.android.keychain",
 			"com.android.packageinstaller",		"com.svox.pico",		"com.android.shell",
-			"com.android.keyguard",			"com.android.backupconfirm",	"com.android.wallpapercropper",
+			"com.android.keyguard",			"com.android.backupconfirm",	"com.android.wallpapercropper", 
 	};
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -103,8 +105,11 @@ public class ChangeDpiActivity extends Activity implements OnItemClickListener {
 		    	 PackageInfo p;
 		    	 for (String appPackageName : sortAppCountInfo.keySet()) {
 		    		try {
-						p=packageManager.getPackageInfo(appPackageName,GET_ACTIVITIES );
-						packageList.add(p);
+		    			if(!appPackageName.equals("org.secmem232.phonetop")){
+		    				p=packageManager.getPackageInfo(appPackageName,GET_ACTIVITIES );
+							packageList.add(p);	
+		    			}
+						
 					} catch (NameNotFoundException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -122,6 +127,7 @@ public class ChangeDpiActivity extends Activity implements OnItemClickListener {
 		            //if(!b) {
 		                //packageList1.add(pi);
 		            //}
+		           //  정렬된 packageinfo에
 		        	for (String pkName : sortAppCountInfo.keySet()) {
 						if(pi.packageName.equals(pkName)){
 							addPackage=false;
@@ -159,12 +165,22 @@ public class ChangeDpiActivity extends Activity implements OnItemClickListener {
 		        //appData.setPackageInfo(packageInfo);
 		        //Toast toast = Toast.makeText(getApplicationContext(),"", Toast.LENGTH_SHORT);
 				//toast.show();
-		    	
-		    	ShowDialog(packageInfo.packageName);
+		    	String appLable;
+				try {
+					
+					
+					appLable = (String)getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(packageInfo.packageName, PackageManager.GET_UNINSTALLED_PACKAGES));
+					ShowDialog(packageInfo.packageName,appLable);
+					
+				} catch (NameNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		    
 		    	
 		    }
 		
-			public void ShowDialog(final String packageName)
+			public void ShowDialog(final String packageName, String appLable)
 			{
 		        AlertDialog.Builder popDialog = new AlertDialog.Builder(this);
 		        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -180,7 +196,18 @@ public class ChangeDpiActivity extends Activity implements OnItemClickListener {
 		        else curDpi.setText(" Cur Dpi : "+cur);
 
 				changeDpi.setText(" Change Dpi : ");
-				popDialog.setTitle("Application Lable ");
+				Drawable icon;
+				try {
+					icon = getPackageManager().getApplicationIcon(packageName);
+					icon.setBounds(0, 0, 10, 10);
+					popDialog.setIcon(icon);
+				} catch (NameNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				popDialog.setTitle(appLable);
+			
 				popDialog.setView(Viewlayout);
 				if(cur.equals("")) cur="480";
 				int currentDpi = Integer.parseInt(cur);
@@ -188,14 +215,17 @@ public class ChangeDpiActivity extends Activity implements OnItemClickListener {
 				seek = (SeekBar) Viewlayout.findViewById(R.id.seekBar);
 				seek.setMax(480);
 				seek.setProgress(currentDpi);
+				resultDpi = currentDpi;
 				seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 				        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser){
 				            //Do something here with new value
+				        	
 				        	if(progress < 160){
 				        		seek.setProgress(160);
 				        		changeDpi.setText(" Change Dpi : " + 160);
 				        		resultDpi = 160;
 				        	}else{
+				        		
 				        		changeDpi.setText(" Change Dpi : " + progress);
 				        		resultDpi = progress;
 				        	}
@@ -217,19 +247,17 @@ public class ChangeDpiActivity extends Activity implements OnItemClickListener {
 				popDialog.setPositiveButton("OK",
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int which) {
-								// sharedpreference ��package 紐낃낵 �ㅼ젙��dpi 媛믪쓣 ��옣.
+					
 								pref = getSharedPreferences("PackageDpi", Context.MODE_WORLD_READABLE);
 							    editor = pref.edit();
 								editor.putString(packageName,""+resultDpi);
 								editor.commit();
-								if(packageName.equals("com.example.applist")){
-									
-								}
+							
 								ActivityManager am = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
 								am.killBackgroundProcesses (packageName);
 								Log.d("test5" , packageName);
 								
-								Toast toast = Toast.makeText(getApplicationContext(),""+packageName+""+resultDpi, Toast.LENGTH_SHORT);
+								Toast toast = Toast.makeText(getApplicationContext(),"변경", Toast.LENGTH_SHORT);
 								
 								toast.show();
 								
@@ -238,7 +266,18 @@ public class ChangeDpiActivity extends Activity implements OnItemClickListener {
 							}
 
 						});
-
+				popDialog.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						Toast toast = Toast.makeText(getApplicationContext(),"취소", Toast.LENGTH_SHORT);
+						
+						toast.show();
+						dialog.dismiss();
+					
+					}
+				});
 				popDialog.create();
 				popDialog.show();
 		        

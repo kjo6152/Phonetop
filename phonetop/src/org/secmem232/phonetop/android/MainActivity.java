@@ -7,6 +7,7 @@ import org.secmem232.phonetop.android.util.Util;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.Intent;
@@ -76,7 +77,10 @@ public class MainActivity extends Activity {
 					editor = pref.edit();
 					editor.putString("start", "1");
 					editor.commit();
-					am.killBackgroundProcesses ("com.android.launcher3");
+					//am.killBackgroundProcesses ("com.android.launcher3");
+					for (RunningAppProcessInfo pid : am.getRunningAppProcesses()) {
+					    am.killBackgroundProcesses(pid.processName);
+					}
 					//컨넥션을 생성하고 서비스를 실행시키고 컨넥션에 바인드한다.
 					PhonetopService.isFirst = true;  
 					phonetopServiceConnection = new PhonetopServiceConnection();
@@ -93,8 +97,10 @@ public class MainActivity extends Activity {
 					editor = pref.edit();
 					editor.putString("start", "0");
 					editor.commit();
-					am.killBackgroundProcesses ("com.android.launcher3");
-					
+					//am.killBackgroundProcesses ("com.android.launcher3");
+					for (RunningAppProcessInfo pid : am.getRunningAppProcesses()) {
+					    am.killBackgroundProcesses(pid.processName);
+					}
 					// 컨넥션 unbind - 서비스 stop - UI 변경 - UI 상태 저장 - 컨넥션 null로 변경 순으로 진행
 					// 스위치 온과 반대 순서로 진행된다.
 					PhonetopService.isFirst = false;  

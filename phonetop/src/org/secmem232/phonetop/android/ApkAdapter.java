@@ -76,11 +76,11 @@ public class ApkAdapter extends BaseAdapter {
         
 		
         packageName = packageInfo.packageName;
-        appIcon.setBounds(0, 0, 60, 60);
+        appIcon.setBounds(0, 0, 30, 30);
         holder.apkName.setCompoundDrawables(appIcon, null, null, null);
         holder.apkName.setCompoundDrawablePadding(15);
-        holder.apkName.setText("App Name: "+appName);
-        holder.packageName.setText("  PkName : "+packageName);
+        holder.apkName.setText(" "+appName);
+        holder.packageName.setText(" "+packageName);
         prefs = context.getSharedPreferences("PackageDpi",Context.MODE_WORLD_READABLE);
         
      
@@ -93,7 +93,7 @@ public class ApkAdapter extends BaseAdapter {
         if(prefs.getString(packageName,"")==""){
         	dpi = "480";
          }
-        holder.apkDpi.setText("App Dpi : "+dpi);
+        holder.apkDpi.setText("Dpi : "+dpi);
        
         //notifyDataSetChanged();
                

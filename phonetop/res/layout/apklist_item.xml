@@ -29,7 +29,8 @@
     android:paddingTop="5dp"
     android:paddingLeft="10dp"
     android:paddingBottom="5dp"
-    android:textStyle="bold" />
+    android:textStyle="bold" 
+    android:textSize="7sp"/>
      <TextView
     android:id="@+id/pkName"
     android:layout_width="wrap_content"
@@ -38,7 +39,8 @@
     android:paddingTop="5dp"
     android:paddingLeft="10dp"
     android:paddingBottom="5dp"
-    android:textStyle="bold" />
+    android:textStyle="bold" 
+    android:textSize="7sp"/>
      
     </LinearLayout>
 <TextView
@@ -50,7 +52,8 @@
 	    android:paddingBottom="5dp"
 	    android:paddingLeft="10dp"
 	    android:paddingTop="5dp"
-	    android:textStyle="bold" />
+	    android:textStyle="bold" 
+	    android:textSize="7sp"/>
 	
 	
 
