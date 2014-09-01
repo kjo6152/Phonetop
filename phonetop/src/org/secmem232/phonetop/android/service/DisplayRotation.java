@@ -34,6 +34,16 @@ public class DisplayRotation {
 	
 	public DisplayRotation(Context context){
 		this.context = context;
+		
+		orientationChanger = new LinearLayout(context);
+		orientationChanger.setClickable(false);
+		orientationChanger.setFocusable(false);
+		orientationChanger.setFocusableInTouchMode(false);
+		orientationChanger.setLongClickable(false);
+
+		wm = (WindowManager) context.getSystemService(Service.WINDOW_SERVICE);
+		wm.addView(orientationChanger, orientationLayout);
+		orientationChanger.setVisibility(View.GONE);
 	}
 	
 	//Rotation Info ---------------------------------------
@@ -41,7 +51,6 @@ public class DisplayRotation {
 		setDeviceOrientation(0);
 	}
 	private void nextOrientationIndex(){
-		wm = (WindowManager) context.getSystemService(Service.WINDOW_SERVICE);
 		this.OrientationIndex = wm.getDefaultDisplay().getRotation();
 		OrientationIndex = (OrientationIndex+1)%OrientationConstant.length;
 	}
@@ -54,28 +63,20 @@ public class DisplayRotation {
 		OrientationIndex = Orientation;
 		int ScreenOrientation = OrientationConstant[OrientationIndex];
 		Log.i(tag, "ScreenOrientation : "+ScreenOrientation);
-		wm = (WindowManager) context.getSystemService(Service.WINDOW_SERVICE);
 		
 		//Device Orientation Setting 1
 		android.provider.Settings.System.putInt(context.getContentResolver(), android.provider.Settings.System.ACCELEROMETER_ROTATION, 1);
 		
-		orientationChanger = new LinearLayout(context);
-		orientationChanger.setClickable(false);
-		orientationChanger.setFocusable(false);
-		orientationChanger.setFocusableInTouchMode(false);
-		orientationChanger.setLongClickable(false);
-
-
-		wm.addView(orientationChanger, orientationLayout);
-		orientationChanger.setVisibility(View.GONE);
-
 		orientationLayout.screenOrientation = ScreenOrientation;
 		wm.updateViewLayout(orientationChanger, orientationLayout);
 		orientationChanger.setVisibility(View.VISIBLE);
 	}
 	public void setCurrentOrientationIndex(){
-		wm = (WindowManager) context.getSystemService(Service.WINDOW_SERVICE);
 		this.OrientationIndex = wm.getDefaultDisplay().getRotation();
+	}
+	
+	public void onDestroy(){
+		wm.removeView(orientationChanger);
 	}
 	//End Rotation Info --------------------------------------
 }
