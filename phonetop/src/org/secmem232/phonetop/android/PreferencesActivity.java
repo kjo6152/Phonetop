@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.View;
@@ -86,6 +87,7 @@ public class PreferencesActivity extends Activity {
 			@Override
 			public void onServiceConnected(ComponentName name, IBinder service) {
 				// TODO Auto-generated method stub
+				Log.i("binder", "rotation onServiceConnected");
 				((PhonetopServiceBinder) service).setDisplayOrientation(whichRotation);
 				unbindService(this);
 			}
@@ -219,17 +221,16 @@ public class PreferencesActivity extends Activity {
 							public void onClick(DialogInterface dialog,
 									int whichButton) {
 								rotationNum=whichButton;
+								
 							}
 						})
 						.setPositiveButton("Ok",
 								new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog,
-											int whichButton) {	
-										if(whichRotation!=rotationNum){
-											whichRotation=rotationNum;
-											bindService(new Intent(PreferencesActivity.this,PhonetopService.class),RotationConnection, 0);
-											//화면 방향 바뀌었을때		
-										}
+										int whichButton) {	
+										whichRotation=rotationNum;
+										bindService(new Intent(PreferencesActivity.this,PhonetopService.class),RotationConnection, 0);
+										//화면 방향 바뀌었을때		
 									}
 								});
 				ab.show();
