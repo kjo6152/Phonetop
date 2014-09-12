@@ -17,6 +17,15 @@
 
 using namespace std;
 
+
+void RtspClient::playVideo(){
+//	system("/home/odroid/Desktop/[RTP]phonetopclient/phonetop rtp://192.168.42.129:24030");	
+}
+void RtspClient::runPlayVideo(){
+//	thread RtspThread(&RtspClient::playVideo, this);
+//	RtspThread.detach();	
+}
+
 string RtspClient::ReadRtspLine() {
 	char buf[1024] = { '\0', };
 	int cnt = 0, ret = -1;
@@ -150,106 +159,19 @@ int RtspClient::ConnectRtspServer() {
 	return server_fd;
 }
 
-int RtspClient::CreateRtpServer() {
-	cout << "CreateRtpServer..." << endl;
-	int server_fd;
-	struct sockaddr_in serv_addr;
 
-	bzero((char *) &serv_addr, sizeof(serv_addr));
-	serv_addr.sin_family = AF_INET;
-	serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-	serv_addr.sin_port = htons(RTP_PORT);
-
-	/* open a tcp socket*/
-	if ((server_fd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
-		printf("socket creation error\n");
-		exit(1);
-	}
-
-	/* connect to  the server */
-	if (bind(server_fd, (struct sockaddr *) &serv_addr, sizeof(serv_addr))
-			< 0) {
-		printf("can't connect to the server\n");
-		exit(1);
-	}
-	this->RtpScoket = server_fd;
-	return server_fd;
-}
-void RtspClient::ReceiveRtpData() {
-	cout << "ReceiveRtpData" << endl;
-
-	int total = 0;
-	int ReadSize = 0;
-	int RemainSize = 0;
-
-	FileDescriptor = open("TSPacket.mpeg", O_WRONLY | O_CREAT, 0666);
-	if (FileDescriptor < 0)
-		return;
-
-	while (true) {
-		ReadSize = recvfrom(this->RtpScoket, RTPBuffer + RemainSize,
-				4096 - RemainSize, 0, (struct sockaddr *) &addr, &addr_len);
-
-		if(ReadSize<=0)break;
-		total += ReadSize;
-
-		RemainSize = extractTSData(ReadSize + RemainSize);
-//		cout << "Total Rtp Receive Data : " << total << endl;
-	}
-	closeRtspClient();
-}
-
-int RtspClient::extractTSData(int RemainSize) {
-	//If RTP Header
-	int ptr = 0;
-	while (true) {
-		if (RTPBuffer[ptr] == 0x80 && RTPBuffer[ptr + 1] == 0x21) {
-//			cout << "extractTSData : RTP Header" << endl;
-			ptr += 12;
-			RemainSize -= 12;
-			continue;
-		} else {
-//			cout << "extractTSData : TS Packet" << endl;
-			if (RemainSize < 188) {
-				memcpy(RTPBuffer, RTPBuffer + ptr, RemainSize);
-				return RemainSize;
-			}
-			write(FileDescriptor, RTPBuffer + ptr, 188);
-			ptr += 188;
-			RemainSize -= 188;
-		}
-	}
-	return 0;
-}
-
-void RtspClient::OpenRtpClient() {
-	cout << "OpenRtpServer" << endl;
-	int Rtp_fd = CreateRtpServer();
-}
 
 bool RtspClient::isRtspConnected() {
 	if (RtspSocket > 0)
 		return true;
 	return false;
 }
-bool RtspClient::isRtpOpened() {
-	if (RtpScoket > 0)
-		return true;
-	return false;
-}
-
 void RtspClient::runRtspClient() {
 	thread RtspThread(&RtspClient::ReceiveRtspData, this);
 	RtspThread.detach();
-	thread RtpThread(&RtspClient::ReceiveRtpData, this);
-	RtpThread.detach();
 }
 
 void RtspClient::closeRtspClient() {
-	if (this->isRtpOpened()) {
-		close(this->RtpScoket);
-		this->RtpScoket = -1;
-	}
 	if (this->isRtspConnected()) {
 		close(this->RtspSocket);
 		this->RtspSocket = -1;

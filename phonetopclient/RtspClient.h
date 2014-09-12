@@ -7,6 +7,7 @@
 #define SERV_ADDR "192.168.42.129"
 #define RTSP_PORT 7236
 #define RTP_PORT 24030
+#define CLIENT_PORT2 8888
 
 class RtspClient{
 public:
@@ -22,6 +23,11 @@ public:
 
 	string session;
 
+	int cnt;
+	struct sockaddr_in client_addr2;
+	int connfd;
+	unsigned int client_addr_len2;
+
 	RtspClient(){
 		RtspSocket = -1;
 		RtpScoket = -1;
@@ -32,23 +38,23 @@ public:
 		RtpRunning = false;
 
 		session = string("");
+		cnt=0;
+		connfd=0;
+		client_addr_len2=sizeof(client_addr2);
 	}
 
 	bool isRtspConnected();
-	bool isRtpOpened();
 	int ConnectRtspServer();
 	string ReadRtspLine();
 	RtspPacket ReadRtspPacket();
 	void ReceiveRtspData();
 	void SendRtspData(string data);
-	int CreateRtpServer();
-	void ReceiveRtpData();
-	void OpenRtpClient();
-	int extractTSData(int RemainSize);
 	void runRtspClient();
 	void requestPause();
 	void requestPlay();
 	void closeRtspClient();
+	void runPlayVideo();
+	void playVideo();
 };
 
 #endif

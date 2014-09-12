@@ -21,6 +21,92 @@
 
 using namespace std;
 
+
+int InputClient::FindMouseEvent(){
+	struct input_event event, event_end;
+	char name[256] = "Unknown";
+	int i=2;
+	int fd;
+        char inputEvent[40];
+	char *ptr;
+	int breakPoint=0;
+	while(1){
+		breakPoint=0;
+		if(i>15)break;
+		char buf[10]="";	
+		char ev[40]="/dev/input/event";
+		snprintf(buf , sizeof(buf),"%d",i);	
+		
+		strcat(ev,buf);
+		int fd; 
+	        fd = open(ev,O_RDONLY);  
+	        if(fd > 0){  
+		 char name[80] = "";  
+		 ioctl(fd, EVIOCGNAME(sizeof(name)),name);
+		 printf("name=%s \n",name); 
+		 ptr=strtok(name," ");
+			while(ptr!=NULL){
+				printf("ptr : %s\n",ptr);		
+				if(strcmp(ptr,"MOUSE")==0||strcmp(ptr,"Mouse")==0){
+					//inputEvent = name;
+					strcpy(inputEvent,ev);
+					breakPoint=1;
+					break;
+				}
+				ptr=strtok(NULL," ");
+			}
+			if(breakPoint==1) break;
+		} 
+		
+		i++;
+		printf("\n");
+	}
+	return i;
+
+}
+
+int InputClient::FindKeyboardEvent(){
+	struct input_event event, event_end;
+	char name[256] = "Unknown";
+	int i=2;
+	int fd;
+	char inputEvent[40];
+	char *ptr;
+	int breakPoint=0;
+	while(1){
+		breakPoint=0;
+		if(i>15)break;
+		char buf[10]="";	
+		char ev[40]="/dev/input/event";
+		snprintf(buf , sizeof(buf),"%d",i);	
+		
+		strcat(ev,buf);
+		int fd; 
+	        fd = open(ev,O_RDONLY);  
+	        if(fd > 0){  
+		 char name[80] = "";  
+		 ioctl(fd, EVIOCGNAME(sizeof(name)),name);
+		 printf("name=%s \n",name); 
+		 ptr=strtok(name," ");
+			while(ptr!=NULL){
+				printf("ptr : %s\n",ptr);		
+				if(strcmp(ptr,"KEYBOARD")==0||strcmp(ptr,"Keyboard")==0||strcmp(ptr,"HID")==0){
+					//inputEvent = name;
+					strcpy(inputEvent,ev);
+					breakPoint=1;
+					break;
+				}
+				ptr=strtok(NULL," ");
+			}
+			if(breakPoint==1) break;
+		} 
+		
+		i++;
+		printf("\n");
+	}
+	return i;
+}
+
 void InputClient::runInputClient() {
 	thread KeyboardThread(&InputClient::sendKeyboardEvent, this);
 	KeyboardThread.detach();
@@ -91,15 +177,13 @@ void InputClient::sendKeyboardEvent() {
 	struct input_event32 event32;
 
 	while (true) {
-		while (isSleepKeyboard) {
-			sleep(1);
-		}
 		if (read(this->KeyboardFd, &event, sizeof(struct input_event)) < 0) {
-			printf("failed to read input event from Keyboard input device\n");
+			printf("failed to read input event from input device");
 			if (errno == EINTR)
 				continue;
 			break;
 		}
+		if (isSleepKeyboard) continue;
 //		printf("type : %d ,code : %d ,value : %d ,size : %d\n", event.type,event.code, event.value, (int) sizeof(struct input_event));
 
 //64bit일 경우 32bit로 변경
@@ -129,15 +213,13 @@ void InputClient::sendMouseEvent() {
 	struct input_event32 event32;
 
 	while (true) {
-		while (isSleepMouse) {
-			sleep(1);
-		}
 		if (read(this->MouseFd, &event, sizeof(struct input_event)) < 0) {
-			printf("failed to read input event from Mouse input device\n");
+			printf("failed to read input event from input device");
 			if (errno == EINTR)
 				continue;
 			break;
 		}
+		if (isSleepMouse) continue;
 //		printf("type : %d ,code : %d ,value : %d ,size : %d\n", event.type,event.code, event.value, (int) sizeof(struct input_event));
 
 //64bit일 경우 32bit로 변경

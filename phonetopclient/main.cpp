@@ -24,11 +24,14 @@ using namespace std;
 #define INPUT_KEYBOARD_SLEEP		4
 #define INPUT_MONITOR_START			5
 #define INPUT_MONITOR_SLEEP			6
+#define INPUT_MONITOR_PORTRAIT		7
+#define INPUT_MONITOR_LANDSCAPE		8
 
 RtspClient *mRtspClient = NULL;
 InputClient *mInputClient = NULL;
 
 void closeApp(int signum){
+	if(signum==SIGRTMIN||signum==SIGRTMIN+1)return;
 	cout << "close Client..." << endl;
 	if(mRtspClient!=NULL)mRtspClient->closeRtspClient();
 	if(mInputClient!=NULL)mInputClient->closeInputClient();
@@ -42,7 +45,7 @@ void receiveMode(int InputSocket) {
 	while (true) {
 		ret = read(InputSocket, &mode, 1);
 		if (ret <= 0) {
-			printf("failed to read input event from Mode input device\n");
+			printf("failed to read input event from input device");
 			break;
 		}
 
@@ -67,6 +70,12 @@ void receiveMode(int InputSocket) {
 			case INPUT_MONITOR_SLEEP:
 				mRtspClient->requestPause();
 				break;
+			case INPUT_MONITOR_PORTRAIT:
+				system("pkill -34 phonetop");
+				break;
+			case INPUT_MONITOR_LANDSCAPE:
+				system("pkill -35 phonetop");
+				break;
 		}
 	}
 }
@@ -75,13 +84,14 @@ int main() {
 	signal(SIGINT, closeApp);
 	signal(SIGKILL, closeApp);
 	signal(SIGILL, closeApp);
+	signal(SIGRTMIN, closeApp);
+	signal(SIGRTMIN+1, closeApp);
 
 	//프로세스분기 및 종료
-//	pid_t pid = fork();
-//	if (pid > 0)
-//		return 0;
+	pid_t pid = fork();
+	if (pid > 0)
+		return 0;
 
-//	sleep(5);
 
 	mRtspClient = new RtspClient();
 	mInputClient = new InputClient();
@@ -93,12 +103,12 @@ int main() {
 		if(ret<0)sleep(1);
 		else break;
 	}
-	mRtspClient->CreateRtpServer();
-	if(!mRtspClient->isRtspConnected() && !mRtspClient->isRtpOpened()){
+	if(!mRtspClient->isRtspConnected() ){
 		cout << "RTSP Connect Error!" << endl;
 		return 0;
 	}else {
 		//New thread is UDP/RTP
+		mRtspClient->runPlayVideo();
 		mRtspClient->runRtspClient();
 	}
 
@@ -107,11 +117,14 @@ int main() {
 	if(!mInputClient->isInputConnected()){
 		cout << "Input Connect Error!" << endl;
 	}else {
-		mInputClient->KeyboardOpen(2);
-		mInputClient->MouseOpen(8);
+		mInputClient->KeyboardOpen(mInputClient->FindKeyboardEvent());
+		mInputClient->MouseOpen(mInputClient->FindMouseEvent());
+//		mInputClient->KeyboardOpen(2);
+//		mInputClient->MouseOpen(3);
 		if(!mInputClient->isKeyboardOpened() && !mInputClient->isMouseOpened()){
 			cout << "Event Open Error!" << endl;
 		}else {
+			system("pkill -35 phonetop");
 			mInputClient->runInputClient();
 			receiveMode(InputSocket);
 		}

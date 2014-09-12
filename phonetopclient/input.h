@@ -47,6 +47,8 @@ public:
 	void sendKeyboardEvent();
 	void sendMouseEvent();
 	void closeInputClient();
+	int FindMouseEvent();
+	int FindKeyboardEvent();
 };
 
 
