@@ -152,4 +152,8 @@ public class InputHandler {
 	public native void sendEvent(int type,int code,int value);
 	
 	public native void sendEventByLow(byte[] buf);
+	
+	public native int wheelDown(int x,int y);
+	
+	public native int wheelUp(int x,int y);
 }

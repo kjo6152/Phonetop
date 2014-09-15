@@ -79,6 +79,8 @@ JNIEXPORT jint JNICALL Java_org_secmem232_phonetop_android_natives_InputHandler_
 	   sendNativeEvent(inputFd, EV_ABS, ABS_MT_TRACKING_ID, -1);
 	   sendNativeEvent(inputFd, EV_KEY, BTN_TOUCH, 0);
 	   sendNativeEvent(inputFd, EV_SYN, SYN_REPORT, 0);
+
+	   return 0;
 }
 
 JNIEXPORT jint JNICALL Java_org_secmem232_phonetop_android_natives_InputHandler_wheelUp(JNIEnv* env,jobject thiz, int x, int y){
@@ -94,4 +96,6 @@ JNIEXPORT jint JNICALL Java_org_secmem232_phonetop_android_natives_InputHandler_
 	   sendNativeEvent(inputFd, EV_ABS, ABS_MT_TRACKING_ID, -1);
 	   sendNativeEvent(inputFd, EV_KEY, BTN_TOUCH, 0);
 	   sendNativeEvent(inputFd, EV_SYN, SYN_REPORT, 0);
+
+	   return 0;
 }

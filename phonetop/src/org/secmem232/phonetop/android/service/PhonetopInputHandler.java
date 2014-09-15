@@ -249,11 +249,11 @@ public class PhonetopInputHandler {
 					inputHandler.sendEvent(3, 1, (int)((double)y*0.91));
 				} else if (code == 8) {
 					if (value > 0) {// 휠아래로
-						for(int i=0;i<=this.wheelSpeed;i++)
-						inputHandler.keyStroke(106);
+//						for(int i=0;i<=this.wheelSpeed;i++)
+						inputHandler.wheelDown(1080/2, 1920/2);
 					} else if (value < 0) {// 휠위로
-						for(int i=0;i<=this.wheelSpeed;i++)
-						inputHandler.keyStroke(105);
+//						for(int i=0;i<=this.wheelSpeed;i++)
+						inputHandler.wheelUp(1080/2, 1920/2);
 					}
 					return;
 				}
