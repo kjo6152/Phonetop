@@ -6,7 +6,9 @@
 #include "include/suinput.h"
 
 #define BUS_VIRTUAL 0x06
-#define LOGTAG "PassUTAG"
+#define LOGTAG "PhoneTopUTAG"
+
+
 
 /**
  * Open input device using suinput.

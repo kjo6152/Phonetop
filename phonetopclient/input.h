@@ -26,6 +26,7 @@ public:
 	int InputSocket;
 	int KeyboardFd;
 	int MouseFd;
+	int PipeFd;
 	bool isSleepKeyboard;
 	bool isSleepMouse;
 
@@ -33,6 +34,7 @@ public:
 		InputSocket = -1;
 		KeyboardFd = -1;
 		MouseFd = -1;
+		PipeFd = -1;
 		isSleepKeyboard = true;
 		isSleepMouse = true;
 	}
@@ -41,11 +43,14 @@ public:
 	bool isInputConnected();
 	bool isKeyboardOpened();
 	bool isMouseOpened();
+	bool isPipeOpened();
 	int KeyboardOpen(int number);
 	int MouseOpen(int number);
+	int PipeOpen();
 	void runInputClient();
 	void sendKeyboardEvent();
 	void sendMouseEvent();
+	void sendPipeEvent();
 	void closeInputClient();
 	int FindMouseEvent();
 	int FindKeyboardEvent();

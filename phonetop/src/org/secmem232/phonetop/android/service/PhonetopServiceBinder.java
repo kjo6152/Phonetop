@@ -17,10 +17,6 @@ public class PhonetopServiceBinder extends Binder{
 	public boolean isConnected(){
 		return mPhonetopService.isConnected;
 	}
-	public void setMouseViewVisible(boolean flag){
-		if(flag) mPhonetopService.setVisibleMouseView(View.VISIBLE); 
-		else mPhonetopService.setVisibleMouseView(View.INVISIBLE);
-	}
 
 	public void setInputMode(boolean isMouse,boolean isKeyboard){
 		if(isMouse)mPhonetopService.inputEventHandler.setEventType(PhonetopInputHandler.INPUT_MOUSE_START);
@@ -67,22 +63,9 @@ public class PhonetopServiceBinder extends Binder{
 		Toast.makeText(mPhonetopService, "역테더링 해제 되었습니다.", Toast.LENGTH_SHORT).show();
 	}
 
-	public void setMousePointerIcon(int whichPointer) {
-		if (mPhonetopService.view == null) return;
-		Util.saveIntegerPreferences(mPhonetopService, "cursor", whichPointer);
-		mPhonetopService.view.settingMyCursor(whichPointer);
-	}
-
 	public void setMouseWheelVolume(int whichWheel) {
-		if (mPhonetopService.view == null) return;
 		Util.saveIntegerPreferences(mPhonetopService, "wheel", whichWheel);
 		mPhonetopService.inputEventHandler.wheelSpeed=whichWheel;
-	}
-
-	public void setMouseSpeed(int whichSpeed) {
-		if (mPhonetopService.view == null) return;
-		Util.saveIntegerPreferences(mPhonetopService, "speed", whichSpeed);
-		mPhonetopService.view.setMySpeed(whichSpeed);
 	}
 
 	//화면 회전

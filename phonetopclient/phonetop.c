@@ -29,6 +29,20 @@
 #include <limits.h>
 #include <signal.h>
 #include <stdint.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <linux/input.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <signal.h>
+#include <unistd.h>
+#include <stdlib.h>
 
 #include "libavutil/avstring.h"
 #include "libavutil/colorspace.h"
@@ -61,9 +75,32 @@
 
 #include <assert.h>
 
+/* Phonetop Variable */
+#pragma pack(1)
+
+struct input_event32 {
+	unsigned int tv_sec;
+	unsigned int tv_usec;
+	unsigned short type;
+	unsigned short code;
+	int value;
+};
+
+#define PHONETOP_PIPE "phonetop_pipe"
+#define LEFT_BUTTON_SDL	501
+#define RIGHT_BUTTON_SDL	502
+#define WHEEL_BUTTON_SDL	503
+#define WHEEL_UP_SDL		504
+#define WHEEL_DOWN_SDL	505
+#define MOUSE_MOVE_SDL	506
+
+static struct input_event32 event32;
+static int pipe_fd=-1;
+static int rotation = 0;
+
 const char program_name[] = "ffplay";
 const int program_birth_year = 2003;
-static int rotation = 0;
+
 
 #define MAX_QUEUE_SIZE (15 * 1024 * 1024)
 #define MIN_FRAMES 5
@@ -3292,32 +3329,7 @@ static void event_loop(VideoState *cur_stream)
         case SDL_VIDEOEXPOSE:
             cur_stream->force_refresh = 1;
             break;
-        //send Click event!!
-        case SDL_MOUSEBUTTONDOWN:
-        	printf("SDL_MOUSEBUTTONDOWN x: %d, y : %d\n",event.button.x,event.button.y);
-        	//send mouse event!!
-        	//rotation 0
-        	if(rotation==0){
-        		show = 1080*screen->h/1920;
-        		start_x = screen->w/2-show/2;
-        		start_y = 0;
-        		ret_x = (event.button.x - start_x) * (1080 / show);
-        		ret_y = (event.button.y - start_y) * (1080 / show);
-        	}
-        	//rotation 1
-        	else{
-        		show = 1080*screen->w/1920;
-				start_x = 0;
-				start_y = screen->h/2-show/2;
-				ret_x = (event.button.x - start_x) * (1080 / show);
-				ret_y = (event.button.y - start_y) * (1080 / show);
-        	}
-        	printf("SDL_MOUSEBUTTONDOWN ret_x: %d, ret_y : %d\n",(int)ret_x,(int)ret_y);
-        break;
-        //mouse pointer show and hide
         case SDL_MOUSEMOTION:
-//        	printf("SDL_MOUSEMOTION x: %d, y : %d, screen x : %d, screen y : %d\n",event.motion.x,event.motion.y,screen->w,screen->h);
-        	//if rotation 0
         	//rotation 0
 			if(rotation==0){
 				show = 1080*screen->h/1920;
@@ -3329,6 +3341,10 @@ static void event_loop(VideoState *cur_stream)
 				}else if(max<event.motion.x){
 					SDL_WarpMouse((int)max,event.motion.y);
 				}
+				start_x = screen->w/2-show/2;
+				start_y = 0;
+				ret_x = (event.motion.x - start_x) * (1080 / show);
+				ret_y = (event.motion.y - start_y) * (1080 / show);
 			}
 			//rotation 1
 			else {
@@ -3341,7 +3357,16 @@ static void event_loop(VideoState *cur_stream)
 				}else if((int)max<event.motion.y){
 					SDL_WarpMouse(event.motion.x,(int)max);
 				}
+				ret_x = 1080 - (event.motion.y * (1080 / show));
+				ret_y = event.motion.x * (1080 / show);
 			}
+			event32.type = 2;
+			event32.code = MOUSE_MOVE_SDL;
+			event32.value = 0;
+			event32.tv_sec = ret_x;
+			event32.tv_usec = ret_y;
+			write(pipe_fd, &event32, sizeof(struct input_event32));
+//			printf("MouseMove ret_x: %d, ret_y : %d\n",(int)ret_x,(int)ret_y);
         	break;
         case SDL_VIDEORESIZE:
                 screen = SDL_SetVideoMode(FFMIN(16383, event.resize.w), event.resize.h, 0,
@@ -3588,8 +3613,8 @@ static void sighandler(int signum){
 		rotation = 1;
 	}
 }
-/* Called from the main */
 
+/* Called from the main */
 int main(int argc, char **argv)
 {
 	signal(SIGRTMIN, sighandler);
@@ -3675,10 +3700,16 @@ int main(int argc, char **argv)
     /*cusor show setting function*/
     SDL_ShowCursor(1);
 
+    /* Phonetop Client named pipe */
+    mkfifo(PHONETOP_PIPE,0666);
+    pipe_fd = open(PHONETOP_PIPE,O_WRONLY);
+    if(pipe_fd<0)return 0;
+
     /*SDL event_setting function*/
     event_loop(is);
 
     /* never returns */
-
+    close(pipe_fd);
+    unlink(PHONETOP_PIPE);
     return 0;
 }

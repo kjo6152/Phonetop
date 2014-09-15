@@ -10,8 +10,10 @@ import org.secmem232.phonetop.android.MouseView;
 import org.secmem232.phonetop.android.natives.InputHandler;
 import org.secmem232.phonetop.android.util.Util;
 
+import android.app.Service;
 import android.content.Context;
 import android.util.Log;
+import android.view.WindowManager;
 
 public class PhonetopInputHandler {
 	private static String tag = "PhonetopInputHandler";
@@ -36,6 +38,8 @@ public class PhonetopInputHandler {
 	static final public byte INPUT_KEYBOARD_SLEEP = 4;
 	static final public byte INPUT_MONITOR_START = 5;
 	static final public byte INPUT_MONITOR_SLEEP = 6;
+	static final public byte INPUT_MONITOR_PORTRAIT = 7;
+	static final public byte INPUT_MONITOR_LANDSCAPE = 8;
 	
 	static final public byte OUTPUT_MONITOR = 1;
 	static final public byte UTIL_THETHERING = 1;
@@ -44,6 +48,13 @@ public class PhonetopInputHandler {
 	static final public int RIGHT_BUTTON = 273;
 	static final public int WHEEL_BUTTON = 274;
 
+	static final public int LEFT_BUTTON_SDL = 501;
+	static final public int RIGHT_BUTTON_SDL = 502;
+	static final public int WHEEL_BUTTON_SDL = 503;
+	static final public int WHEEL_UP_SDL = 504;
+	static final public int WHEEL_DOWN_SDL = 505;
+	static final public int MOUSE_MOVE_SDL = 506;
+	
 	static final public int WHEEL_SLOW = 0;
 	static final public int WHEEL_NORMAL = 1;
 	static final public int WHEEL_FAST = 2;
@@ -65,7 +76,6 @@ public class PhonetopInputHandler {
 
 	private Context context;
 	private Socket client;
-	private MouseView view;
 
 	private boolean isEnd;
 
@@ -78,6 +88,8 @@ public class PhonetopInputHandler {
 	int type;
 	int code;
 	int value;
+	int x = 0;
+	int y = 0;
 	int inputMode;
 
 	int btnLeft;
@@ -87,11 +99,10 @@ public class PhonetopInputHandler {
 	int wheelSpeed;
 
 
-	public PhonetopInputHandler(Context context,Socket client, MouseView view) {
+	public PhonetopInputHandler(Context context,Socket client) {
 		// TODO Auto-generated constructor stub
 		this.context = context;
 		this.client = client;
-		this.view = view;
 
 		wheelSpeed = Util.getIntegerPreferences(context, "wheel");
 		btnLeft = Util.getIntegerPreferences(context, "btn_left");
@@ -110,6 +121,7 @@ public class PhonetopInputHandler {
 	}
 
 	public void start() {
+//		Log.i("Phonetop", "InputHandler Start");
 		// TODO Auto-generated method stub
 		try {
 			in = client.getInputStream();
@@ -119,15 +131,22 @@ public class PhonetopInputHandler {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-
+		
+		WindowManager wm = (WindowManager) context.getSystemService(Service.WINDOW_SERVICE);
+		if(wm.getDefaultDisplay().getRotation()==0){
+			setEventType(INPUT_MONITOR_PORTRAIT);
+		}else {
+			setEventType(INPUT_MONITOR_LANDSCAPE);
+		}
+		
 		inputHandler.open();
 
 		while (!isEnd) {
-			Log.i(tag, "while (!isEnd)");
+//			Log.i(tag, "while (!isEnd)");
 			buttonEvents();
 		}
 		inputHandler.close();
-		
+//		Log.i("Phonetop", "InputHandler end");
 	}
 
 	public void executeMouseFunction(int num) {
@@ -191,22 +210,16 @@ public class PhonetopInputHandler {
 			buffer.rewind();
 			buffer.put(a);
 			//32bit용
+			
 			type = buffer.getShort(8);
 			code = buffer.getShort(10);
 			value = buffer.getInt(12);
 
-//			Log.d("TCP/IPtest", "type : " + type + ",code : " + code+ ",value : " + value);
-			
-			if (view == null)
-				return;
-
 			switch (type) {
 			case 1:
 				if (code == LEFT_BUTTON) {// 마우스 좌버튼 클릭시
-					Log.d("name", "left : " + btnLeft);
 					executeMouseFunction(btnLeft);
 				} else if (code == RIGHT_BUTTON) {// 마우스 우버튼 클릭시
-					Log.d("name", "right : " + btnRight);
 					executeMouseFunction(btnRight);
 				} else if (code == WHEEL_BUTTON) {// 마우스 휠 버튼 클릭시
 					Log.d("name", "wheel : " + btnWheel);
@@ -229,12 +242,11 @@ public class PhonetopInputHandler {
 				break;
 			case 2:
 				// 움직일때 x,y갱신
-				if (code == 0) {// 좌우
-					view.setRelativeCurser_X(value);
-					view.postInvalidate();
-				} else if (code == 1) {// 상하
-					view.setRelativeCurser_Y(value);
-					view.postInvalidate();
+				if (code == MOUSE_MOVE_SDL) {// 마우스 이동
+					x = buffer.getInt(0);
+					y = buffer.getInt(4);
+					inputHandler.sendEvent(3, 0, x);
+					inputHandler.sendEvent(3, 1, (int)((double)y*0.91));
 				} else if (code == 8) {
 					if (value > 0) {// 휠아래로
 						for(int i=0;i<=this.wheelSpeed;i++)
@@ -243,7 +255,6 @@ public class PhonetopInputHandler {
 						for(int i=0;i<=this.wheelSpeed;i++)
 						inputHandler.keyStroke(105);
 					}
-					//Util.makeToast(this, "Wheel : "+wheelSpeed, Toast.LENGTH_SHORT);
 					return;
 				}
 				break;
@@ -254,15 +265,11 @@ public class PhonetopInputHandler {
 			default:
 				inputHandler.sendEvent(type, code, value);
 			}			
-			inputHandler.sendEvent(3, 0, view.getValueX());// ABS_X:0 EV_ABS:3
-			inputHandler.sendEvent(3, 1, (int)((double)view.getValueY()*0.91));// ABS_Y:1
-			Log.d("TCP/IPtest", "x_posotion : " + view.getValueX() + ",y_position : " + view.getValueY());
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// 계속 마우스 입력 파일을 읽어서 setCursor()갱신시켜주는 로직
 	}
 
 	public void stop() {

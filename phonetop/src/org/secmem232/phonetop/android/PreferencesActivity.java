@@ -45,7 +45,6 @@ public class PreferencesActivity extends Activity {
 			@Override
 			public void onServiceConnected(ComponentName name, IBinder service) {
 				// TODO Auto-generated method stub
-				((PhonetopServiceBinder) service).setMousePointerIcon(whichPointer);
 				unbindService(this);
 			}
 
@@ -59,7 +58,6 @@ public class PreferencesActivity extends Activity {
 			@Override
 			public void onServiceConnected(ComponentName name, IBinder service) {
 				// TODO Auto-generated method stub
-				((PhonetopServiceBinder) service).setMouseSpeed(whichSpeed);
 				unbindService(this);
 			}
 

@@ -48,6 +48,11 @@ JNIEXPORT void JNICALL Java_org_secmem232_phonetop_android_natives_InputHandler_
 JNIEXPORT void JNICALL Java_org_secmem232_phonetop_android_natives_InputHandler_sendEventByLow
   (JNIEnv *, jobject, jbyteArray);
 
+JNIEXPORT jint JNICALL Java_org_secmem232_phonetop_android_natives_InputHandler_wheelDown
+  (JNIEnv* env,jobject thiz, int x, int y);
+
+JNIEXPORT jint JNICALL Java_org_secmem232_phonetop_android_natives_InputHandler_wheelUp
+  (JNIEnv* env,jobject thiz, int x, int y);
 #ifdef __cplusplus
 }
 #endif

@@ -118,10 +118,8 @@ public class MainActivity extends Activity {
 				// TODO Auto-generated method stub
 				if (isChecked) {
 					if(phonetopServiceConnection!=null)phonetopServiceConnection.setInputMode(mouseCb.isChecked(), keyboardCb.isChecked());
-					if(phonetopServiceConnection!=null)phonetopServiceConnection.setMouseViewVisible(true);
 				} else {
 					if(phonetopServiceConnection!=null)phonetopServiceConnection.setInputMode(mouseCb.isChecked(), keyboardCb.isChecked());
-					if(phonetopServiceConnection!=null)phonetopServiceConnection.setMouseViewVisible(false);
 				}
 				Util.saveBooleanPreferences(MainActivity.this, "mouseCb", isChecked);
 			}

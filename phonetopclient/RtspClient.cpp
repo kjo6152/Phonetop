@@ -71,13 +71,13 @@ RtspPacket RtspClient::ReadRtspPacket() {
 	return mRtspPacket;
 }
 void RtspClient::ReceiveRtspData() {
-	cout << "ReceiveRtspData" << endl;
+//	cout << "ReceiveRtspData" << endl;
 	while (true) {
 		try {
 			RtspPacket mRtspPacket = ReadRtspPacket();
 
-			cout << "Receive Data : " << endl;
-			cout << mRtspPacket.toString();
+//			cout << "Receive Data : " << endl;
+//			cout << mRtspPacket.toString();
 
 			if (mRtspPacket.header->method.compare(RTSP_OPTIONS) == 0) {
 				SendRtspData(mRtspPacket.getM1Message());
@@ -128,8 +128,8 @@ void RtspClient::SendRtspData(string data) {
 		throw "socket closed";
 		return;
 	}
-	cout << "Send Data - " << data.length() << " : " << endl;
-	cout << data;
+//	cout << "Send Data - " << data.length() << " : " << endl;
+//	cout << data;
 }
 
 int RtspClient::ConnectRtspServer() {

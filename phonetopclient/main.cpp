@@ -117,14 +117,14 @@ int main() {
 	if(!mInputClient->isInputConnected()){
 		cout << "Input Connect Error!" << endl;
 	}else {
-		mInputClient->KeyboardOpen(mInputClient->FindKeyboardEvent());
-		mInputClient->MouseOpen(mInputClient->FindMouseEvent());
-//		mInputClient->KeyboardOpen(2);
-//		mInputClient->MouseOpen(3);
-		if(!mInputClient->isKeyboardOpened() && !mInputClient->isMouseOpened()){
+//		mInputClient->KeyboardOpen(mInputClient->FindKeyboardEvent());
+//		mInputClient->MouseOpen(mInputClient->FindMouseEvent());
+		mInputClient->PipeOpen();
+		mInputClient->KeyboardOpen(2);
+		mInputClient->MouseOpen(8);
+		if(!mInputClient->isKeyboardOpened() && !mInputClient->isPipeOpened() && !mInputClient->isMouseOpened()){
 			cout << "Event Open Error!" << endl;
 		}else {
-			system("pkill -35 phonetop");
 			mInputClient->runInputClient();
 			receiveMode(InputSocket);
 		}

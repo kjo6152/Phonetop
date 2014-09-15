@@ -21,10 +21,6 @@ public class PhonetopServiceConnection implements ServiceConnection{
 		ptservice = null;
 	}
 	
-	public void setMouseViewVisible(boolean flag){
-		if(ptservice!=null)ptservice.setMouseViewVisible(flag);
-	}
-	
 	public void setInputMode(boolean isMouse,boolean isKeyboard){
 		if(ptservice!=null)ptservice.setInputMode(isMouse,isKeyboard);
 	}
@@ -44,18 +40,10 @@ public class PhonetopServiceConnection implements ServiceConnection{
 		if(ptservice!=null)ptservice.endTetheringService();
 	}
 			
-	public void setMousePointerIcon(int whichPointer) {
-		if(ptservice!=null)ptservice.setMousePointerIcon(whichPointer);
-	}
-
 	public void setMouseWheelVolume(int whichWheel) {
 		if(ptservice!=null)ptservice.setMouseWheelVolume(whichWheel);
 	}
 
-	public void setMouseSpeed(int whichSpeed) {
-		if(ptservice!=null)ptservice.setMouseSpeed(whichSpeed);
-	}
-	
 	//화면 회전
 	public void setDisplayOrientation(int whichOrientation){
 		if(ptservice!=null)ptservice.setDisplayOrientation(whichOrientation);

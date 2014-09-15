@@ -21,6 +21,7 @@
 
 using namespace std;
 
+#define PHONETOP_PIPE "phonetop_pipe"
 
 int InputClient::FindMouseEvent(){
 	struct input_event event, event_end;
@@ -112,6 +113,8 @@ void InputClient::runInputClient() {
 	KeyboardThread.detach();
 	thread MouseThread(&InputClient::sendMouseEvent, this);
 	MouseThread.detach();
+	thread PipeThread(&InputClient::sendPipeEvent, this);
+	PipeThread.detach();
 }
 bool InputClient::isInputConnected() {
 	if (InputSocket > 0)
@@ -161,6 +164,12 @@ int InputClient::MouseOpen(int number) {
 	MouseFd = fd;
 	return fd;
 }
+int InputClient::PipeOpen() {
+	cout << "PipeOpen : " << PHONETOP_PIPE << endl;
+	int fd = open(PHONETOP_PIPE, O_RDONLY);
+	PipeFd = fd;
+	return fd;
+}
 bool InputClient::isKeyboardOpened() {
 	if (KeyboardFd > 0)
 		return true;
@@ -171,6 +180,11 @@ bool InputClient::isMouseOpened() {
 		return true;
 	return false;
 }
+bool InputClient::isPipeOpened() {
+	if (PipeFd > 0)
+		return true;
+	return false;
+}
 void InputClient::sendKeyboardEvent() {
 	cout << "sendKeyboardEvent"	<< endl;
 	struct input_event event;
@@ -178,7 +192,7 @@ void InputClient::sendKeyboardEvent() {
 
 	while (true) {
 		if (read(this->KeyboardFd, &event, sizeof(struct input_event)) < 0) {
-			printf("failed to read input event from input device");
+			printf("failed to read input event from input device(keyboard)\n");
 			if (errno == EINTR)
 				continue;
 			break;
@@ -214,7 +228,7 @@ void InputClient::sendMouseEvent() {
 
 	while (true) {
 		if (read(this->MouseFd, &event, sizeof(struct input_event)) < 0) {
-			printf("failed to read input event from input device");
+			printf("failed to read input event from input device(mouse)\n");
 			if (errno == EINTR)
 				continue;
 			break;
@@ -239,6 +253,30 @@ void InputClient::sendMouseEvent() {
 			event.value = htonl(event.value);
 			write(this->InputSocket, &event, sizeof(struct input_event));
 		}
+	}
+	closeInputClient();
+}
+
+void InputClient::sendPipeEvent() {
+	cout << "sendPlayerEvent"	<< endl;
+	struct input_event32 event32;
+
+	while (true) {
+		if (read(this->PipeFd, &event32, sizeof(struct input_event32)) < 0) {
+			printf("failed to read input event from input device(pipe)\n");
+			if (errno == EINTR)
+				continue;
+			break;
+		}
+		if (isSleepMouse) continue;
+//		printf("type : %d ,code : %d ,value : %d\n", event32.type,event32.code, event32.value);
+
+		event32.type = htons(event32.type);
+		event32.code = htons(event32.code);
+		event32.value = htonl(event32.value);
+		event32.tv_sec = htonl(event32.tv_sec);
+		event32.tv_usec = htonl(event32.tv_usec);
+		write(this->InputSocket, &event32, sizeof(struct input_event32));
 	}
 	closeInputClient();
 }
