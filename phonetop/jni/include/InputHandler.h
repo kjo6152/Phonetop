@@ -11,40 +11,99 @@ extern "C" {
 #define org_secmem232_phonetop_android_natives_InputHandler_DIMENSION 4096L
 #undef org_secmem232_phonetop_android_natives_InputHandler_HALF_DIMENSION
 #define org_secmem232_phonetop_android_natives_InputHandler_HALF_DIMENSION 2048L
-
+/*
+ * Class:     org_secmem232_phonetop_android_natives_InputHandler
+ * Method:    openInputDevice
+ * Signature: (II)Z
+ */
 JNIEXPORT jboolean JNICALL Java_org_secmem232_phonetop_android_natives_InputHandler_openInputDevice
   (JNIEnv *, jobject, jint, jint);
 
+/*
+ * Class:     org_secmem232_phonetop_android_natives_InputHandler
+ * Method:    openInputDeviceWithoutPermission
+ * Signature: ()Z
+ */
 JNIEXPORT jboolean JNICALL Java_org_secmem232_phonetop_android_natives_InputHandler_openInputDeviceWithoutPermission
   (JNIEnv *, jobject);
 
+/*
+ * Class:     org_secmem232_phonetop_android_natives_InputHandler
+ * Method:    closeInputDevice
+ * Signature: ()V
+ */
 JNIEXPORT void JNICALL Java_org_secmem232_phonetop_android_natives_InputHandler_closeInputDevice
   (JNIEnv *, jobject);
 
+/*
+ * Class:     org_secmem232_phonetop_android_natives_InputHandler
+ * Method:    closeInputDeviceWithoutRevertPermission
+ * Signature: ()V
+ */
 JNIEXPORT void JNICALL Java_org_secmem232_phonetop_android_natives_InputHandler_closeInputDeviceWithoutRevertPermission
   (JNIEnv *, jobject);
 
+/*
+ * Class:     org_secmem232_phonetop_android_natives_InputHandler
+ * Method:    keyDown
+ * Signature: (I)V
+ */
 JNIEXPORT void JNICALL Java_org_secmem232_phonetop_android_natives_InputHandler_keyDown
   (JNIEnv *, jobject, jint);
 
+/*
+ * Class:     org_secmem232_phonetop_android_natives_InputHandler
+ * Method:    keyUp
+ * Signature: (I)V
+ */
 JNIEXPORT void JNICALL Java_org_secmem232_phonetop_android_natives_InputHandler_keyUp
   (JNIEnv *, jobject, jint);
 
+/*
+ * Class:     org_secmem232_phonetop_android_natives_InputHandler
+ * Method:    keyStroke
+ * Signature: (I)V
+ */
 JNIEXPORT void JNICALL Java_org_secmem232_phonetop_android_natives_InputHandler_keyStroke
   (JNIEnv *, jobject, jint);
 
+/*
+ * Class:     org_secmem232_phonetop_android_natives_InputHandler
+ * Method:    touchDown
+ * Signature: ()V
+ */
 JNIEXPORT void JNICALL Java_org_secmem232_phonetop_android_natives_InputHandler_touchDown
   (JNIEnv *, jobject);
 
+/*
+ * Class:     org_secmem232_phonetop_android_natives_InputHandler
+ * Method:    touchUp
+ * Signature: ()V
+ */
 JNIEXPORT void JNICALL Java_org_secmem232_phonetop_android_natives_InputHandler_touchUp
   (JNIEnv *, jobject);
 
+/*
+ * Class:     org_secmem232_phonetop_android_natives_InputHandler
+ * Method:    touchSetPtr
+ * Signature: (II)V
+ */
 JNIEXPORT void JNICALL Java_org_secmem232_phonetop_android_natives_InputHandler_touchSetPtr
   (JNIEnv *, jobject, jint, jint);
 
+/*
+ * Class:     org_secmem232_phonetop_android_natives_InputHandler
+ * Method:    sendEvent
+ * Signature: (III)V
+ */
 JNIEXPORT void JNICALL Java_org_secmem232_phonetop_android_natives_InputHandler_sendEvent
   (JNIEnv *, jobject, jint, jint, jint);
 
+/*
+ * Class:     org_secmem232_phonetop_android_natives_InputHandler
+ * Method:    sendEventByLow
+ * Signature: ([B)V
+ */
 JNIEXPORT void JNICALL Java_org_secmem232_phonetop_android_natives_InputHandler_sendEventByLow
   (JNIEnv *, jobject, jbyteArray);
 

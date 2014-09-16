@@ -43,7 +43,7 @@ int suinput_write(int uinput_fd,
     event.code = code;
     event.value = value;
     if (write(uinput_fd, &event, sizeof(event)) != sizeof(event))
-        return -1;
+        return -1;cxcxcsds
     return 0;
 }
 

@@ -76,12 +76,10 @@ public class PhonetopInputHandler {
 			0, 0, 0 };
 	ByteBuffer buffer;
 	int type;
-	int code;
 	int value;
 	int inputMode;
 
 	int btnLeft;
-	int btnRight;
 	int btnWheel;
 
 	int wheelSpeed;
@@ -199,7 +197,7 @@ public class PhonetopInputHandler {
 			
 			if (view == null)
 				return;
-
+			Log.d("input","input value2222: 	" +type+ ","+code+ ","+ value);
 			switch (type) {
 			case 1:
 				if (code == LEFT_BUTTON) {// 마우스 좌버튼 클릭시
@@ -236,13 +234,44 @@ public class PhonetopInputHandler {
 					view.setRelativeCurser_Y(value);
 					view.postInvalidate();
 				} else if (code == 8) {
+					Log.d("wheelinput","type,code,value: 	" +type+ ","+code+ ","+ value);
+					//inputHandler.sendEvent(type, code, value);
 					if (value > 0) {// 휠아래로
-						for(int i=0;i<=this.wheelSpeed;i++)
-						inputHandler.keyStroke(105);
+						inputHandler.touchDown();
+						//inputHandler.sendEvent(4,4,589825);
+						//inputHandler.touchUp();
+				
+						//for(int i=0;i<=this.wheelSpeed;i++){
+							Log.d("input","donw type,code,value: 	" +type+ ","+code+ ","+ value);
+							//inputHandler.sendEvent(type, code, value);
+							//inputHandler.
+						//}
+						//inputHandler.keyStroke(103);
 					} else if (value < 0) {// 휠위로
-						for(int i=0;i<=this.wheelSpeed;i++)
-						inputHandler.keyStroke(106);
+						Log.d("wheelinput","up type,code,value: 	" +type+ ","+code+ ","+ value);
+						inputHandler.touchUp();
+						//inputHandler.sendEvent(3, 0, (int)((double)view.getValueY()*0.91)-1);
+						//inputHandler.sendEvent(4,4,589825);
+						//inputHandler.sendEvent(1,272,1);
+//						inputHandler.sendEvent(0, 0, 0);
+//						Log.d("wheelinput","aa1");
+//						for(int i=0;i<50;i++){
+//							Log.d("wheelinput","aa2");
+//							inputHandler.sendEvent(2,0,-1);
+//							inputHandler.sendEvent(2,1,-1);
+//							inputHandler.sendEvent(0, 0, 0);
+//					
+//						}
 					}
+						//inputHandler.sendEvent(4,4,589825);
+						//inputHandler.sendEvent(1,272,0);
+						//inputHandler.touchUp();
+						//inputHandler.sendEvent(0, 0, 0);
+						//for(int i=0;i<=this.wheelSpeed;i++){
+							//inputHandler.sendEvent(type, code, value);
+					//	}
+						//inputHandler.keyStroke(108);
+					
 					//Util.makeToast(this, "Wheel : "+wheelSpeed, Toast.LENGTH_SHORT);
 					return;
 				}
@@ -253,6 +282,7 @@ public class PhonetopInputHandler {
 				return;
 			default:
 				inputHandler.sendEvent(type, code, value);
+				return;
 			}			
 			inputHandler.sendEvent(3, 0, view.getValueX());// ABS_X:0 EV_ABS:3
 			inputHandler.sendEvent(3, 1, (int)((double)view.getValueY()*0.91));// ABS_Y:1
@@ -265,10 +295,16 @@ public class PhonetopInputHandler {
 		// 계속 마우스 입력 파일을 읽어서 setCursor()갱신시켜주는 로직
 	}
 
+	int btnRight;
+
+
 	public void stop() {
 		// TODO Auto-generated method stub
 		isEnd=true;
 	}
+
+	int code;
+
 
 	public void sendEvent(int type,int code,int value){
 		inputHandler.sendEvent(type, code, value);
