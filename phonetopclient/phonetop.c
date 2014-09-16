@@ -3335,30 +3335,34 @@ static void event_loop(VideoState *cur_stream)
 				show = 1080*screen->h/1920;
 				min = screen->w/2-show/2;
 				max = screen->w/2+show/2;
-				//if x is low or higher
-				if(min>event.motion.x){
-					SDL_WarpMouse((int)min,event.motion.y);
-				}else if(max<event.motion.x){
-					SDL_WarpMouse((int)max,event.motion.y);
-				}
+
 				start_x = screen->w/2-show/2;
 				start_y = 0;
 				ret_x = (event.motion.x - start_x) * (1080 / show);
 				ret_y = (event.motion.y - start_y) * (1080 / show);
+
+				//if x is low or higher
+				if(min>event.motion.x){
+					ret_x = 0;
+				}else if(max<event.motion.x){
+					ret_x = 1080;
+				}
 			}
 			//rotation 1
 			else {
 				show = 1080*screen->w/1920;
 				min = screen->h/2-show/2;
 				max = screen->h/2+show/2;
-				//if y is low or higher
-				if((int)min>event.motion.y){
-					SDL_WarpMouse(event.motion.x,(int)min);
-				}else if((int)max<event.motion.y){
-					SDL_WarpMouse(event.motion.x,(int)max);
-				}
+
 				ret_x = 1080 - (event.motion.y * (1080 / show));
 				ret_y = event.motion.x * (1080 / show);
+
+				//if y is low or higher
+				if((int)min>event.motion.y){
+					ret_x = 1080;
+				}else if((int)max<event.motion.y){
+					ret_x = 0;
+				}
 			}
 			event32.type = 2;
 			event32.code = MOUSE_MOVE_SDL;
