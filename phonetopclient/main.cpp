@@ -35,6 +35,7 @@ void closeApp(int signum){
 	cout << "close Client..." << endl;
 	if(mRtspClient!=NULL)mRtspClient->closeRtspClient();
 	if(mInputClient!=NULL)mInputClient->closeInputClient();
+	system("pkill -9 phonetop");
 	exit(0);
 }
 
@@ -117,11 +118,11 @@ int main() {
 	if(!mInputClient->isInputConnected()){
 		cout << "Input Connect Error!" << endl;
 	}else {
-//		mInputClient->KeyboardOpen(mInputClient->FindKeyboardEvent());
-//		mInputClient->MouseOpen(mInputClient->FindMouseEvent());
+		mInputClient->KeyboardOpen(mInputClient->FindKeyboardEvent());
+		mInputClient->MouseOpen(mInputClient->FindMouseEvent());
 		mInputClient->PipeOpen();
-		mInputClient->KeyboardOpen(2);
-		mInputClient->MouseOpen(8);
+//		mInputClient->KeyboardOpen(2);
+//		mInputClient->MouseOpen(8);
 		if(!mInputClient->isKeyboardOpened() && !mInputClient->isPipeOpened() && !mInputClient->isMouseOpened()){
 			cout << "Event Open Error!" << endl;
 		}else {

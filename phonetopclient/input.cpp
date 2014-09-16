@@ -21,7 +21,7 @@
 
 using namespace std;
 
-#define PHONETOP_PIPE "phonetop_pipe"
+#define PHONETOP_PIPE "/tmp/phonetop_pipe"
 
 int InputClient::FindMouseEvent(){
 	struct input_event event, event_end;

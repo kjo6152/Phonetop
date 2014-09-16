@@ -86,7 +86,7 @@ struct input_event32 {
 	int value;
 };
 
-#define PHONETOP_PIPE "phonetop_pipe"
+#define PHONETOP_PIPE "/tmp/phonetop_pipe"
 #define LEFT_BUTTON_SDL	501
 #define RIGHT_BUTTON_SDL	502
 #define WHEEL_BUTTON_SDL	503
@@ -3703,8 +3703,10 @@ int main(int argc, char **argv)
     /* Phonetop Client named pipe */
     mkfifo(PHONETOP_PIPE,0666);
     pipe_fd = open(PHONETOP_PIPE,O_WRONLY);
-    if(pipe_fd<0)return 0;
-
+    if(pipe_fd<0){
+		printf("pipe create error!!");
+		return 0;
+	}
     /*SDL event_setting function*/
     event_loop(is);
 
