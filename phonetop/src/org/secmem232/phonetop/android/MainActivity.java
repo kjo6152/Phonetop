@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -72,6 +73,7 @@ public class MainActivity extends Activity {
 				ActivityManager am = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
 			
 				if (isChecked) {
+					
 					pref = getSharedPreferences("startPhoneTop", Context.MODE_WORLD_READABLE);
 					editor = pref.edit();
 					editor.putString("start", "1");

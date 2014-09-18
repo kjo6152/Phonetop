@@ -65,7 +65,7 @@ public class ChangeDpiActivity extends Activity implements OnItemClickListener {
 			"com.android.vpndialogs"	,"com.android.providers",	"com.android.provision",
 			"com.android.pacprocessor",  	"com.android.certinstaller",	"com.android.keychain",
 			"com.android.packageinstaller",		"com.svox.pico",		"com.android.shell",
-			"com.android.keyguard",			"com.android.backupconfirm",	"com.android.wallpapercropper", 
+			"com.android.keyguard",			"com.android.backupconfirm",	"com.android.wallpapercropper","android" 
 	};
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

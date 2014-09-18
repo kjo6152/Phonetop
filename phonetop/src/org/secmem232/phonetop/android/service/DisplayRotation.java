@@ -1,6 +1,9 @@
 package org.secmem232.phonetop.android.service;
 
 
+import java.util.List;
+
+import android.app.ActivityManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
@@ -60,6 +63,9 @@ public class DisplayRotation {
 		setDeviceOrientation(OrientationIndex);
 	}
 	public void setDeviceOrientation(int Orientation) {
+		
+		ProcessKill();
+		
 		OrientationIndex = Orientation;
 		int ScreenOrientation = OrientationConstant[OrientationIndex];
 		Log.i(tag, "ScreenOrientation : "+ScreenOrientation);
@@ -71,6 +77,22 @@ public class DisplayRotation {
 		wm.updateViewLayout(orientationChanger, orientationLayout);
 		orientationChanger.setVisibility(View.VISIBLE);
 	}
+	
+	public void ProcessKill() {
+		// TODO Auto-generated method stub
+		 ActivityManager am = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
+		 List<ActivityManager.RunningAppProcessInfo> appList = am.getRunningAppProcesses();
+		  
+	    for(int i=0; i<appList.size(); i++){
+	            ActivityManager.RunningAppProcessInfo rapi = appList.get(i);
+	           if(!rapi.processName.equals("org.secmem232.phonetop")){
+	               am.killBackgroundProcesses (rapi.processName);
+		            Log.d(tag,"Package Name : " + rapi.processName);
+	            }
+	            
+	      }
+	}
+
 	public void setCurrentOrientationIndex(){
 		this.OrientationIndex = wm.getDefaultDisplay().getRotation();
 	}

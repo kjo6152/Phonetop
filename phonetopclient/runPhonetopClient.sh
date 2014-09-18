@@ -1,7 +1,7 @@
 #!/bin/bash
 #This sciprt is run Phonetop client
-set -x 
-xhost local:odroid
+
+export XAUTHORITY=/home/odroid/.Xauthority
 export DISPLAY=:0.0
 
 echo 'PhoneTop Client Running Wait...'
@@ -15,7 +15,7 @@ fork(){
 # Step 1. If old Phonetop client is running, kill old process
 pkill -9 $PROCESS_NAME
 pkill -9 $PROCESS_NAME2
-sleep 1
+sleep 2
 # Step 2. Check usb0 iface is ready
 usb0=""
 while [ $usb0 -z ]
@@ -36,6 +36,7 @@ ifconfig usb0 192.168.42.55 up
 # Step 4. run Phonetop client
 #Following script is run Phonetop client
 #If you run via udev, you should execute to absolute path
+mkfifo /tmp/phonetop_pipe
 $SCRIPT_PATH2 rtp://192.168.42.129:24030 &
 $SCRIPT_PATH &
 exit

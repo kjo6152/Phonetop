@@ -6,10 +6,12 @@ import org.secmem232.phonetop.R;
 import org.secmem232.phonetop.android.util.Util;
 
 import android.annotation.SuppressLint;
+import android.app.Instrumentation;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.os.Build;
 import android.text.method.MetaKeyKeyListener;
+import android.util.Log;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
@@ -83,10 +85,16 @@ public class HardKeyboard extends InputMethodService {
 	}
 
 	private boolean translateKeyDown(int keyCode, KeyEvent event) {
+	
 		mState = MetaKeyKeyListener.handleKeyDown(mState, keyCode, event);
+		Log.d("PhoneTopIme" ,"mState Keydown :" +mState);
+
 		int c = event.getUnicodeChar(MetaKeyKeyListener.getMetaState(mState));
 		mState = MetaKeyKeyListener.adjustMetaAfterKeypress(mState);
+		Log.d("PhoneTopIme" ,"mState adjustMetaAfterKeyPress :" +mState);
+		
 		InputConnection ic = getCurrentInputConnection();
+		ic.clearMetaKeyStates((int) mState);
 		if (c == 0 || ic == null) {
 			return false;
 		}
@@ -98,13 +106,12 @@ public class HardKeyboard extends InputMethodService {
 		if (mComposing.length() > 0) {
 			char accent = mComposing.charAt(mComposing.length() - 1);
 			int composed = KeyEvent.getDeadChar(accent, c);
-
 			if (composed != 0) {
 				c = composed;
 				mComposing.setLength(mComposing.length() - 1);
 			}
 		}
-
+		Log.d("PhoneTopIme", "shift code : "+keyCode);
 		onKey(c, null);
 
 		return true;
@@ -114,7 +121,7 @@ public class HardKeyboard extends InputMethodService {
 	@SuppressLint("NewApi")
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-
+		
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_BACK:
 			if (this.isInputViewShown()) {
@@ -147,38 +154,34 @@ public class HardKeyboard extends InputMethodService {
 			if (hangulMode)
 				automata.reset();
 			return false;
+		case KeyEvent.KEYCODE_SPACE:
+			if (hangulMode)
+				automata.reset();
+			break;
 
 		default:
-
+		
 			if (PROCESS_HARD_KEYS) {
-
+				Log.d("PhoneTopIme", "shift"+keyCode);
 				if (event.getScanCode() == 122) {
 					switchLanguage();
 					return true;
 				}
-				if (keyCode == KeyEvent.KEYCODE_F4
-						&& (event.getMetaState() & KeyEvent.META_ALT_ON) != 0) {
-					System.out.println("alt f4");
-				}
+				
 				if (translateKeyDown(keyCode, event)) {
+					
 					return true;
 				}
 			}
 		}
 
-		return super.onKeyDown(keyCode, event);
+			return super.onKeyDown(keyCode, event);
+		
 	}
 
-	/**
-	 * Use this to monitor key events being delivered to the application. We get
-	 * first crack at them, and can either resume them or let them continue to
-	 * the app.
-	 */
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		// If we want to do transformations on text being entered with a hard
-		// keyboard, we need to process the up events to update the meta key
-		// state we are tracking.
+
 		if (PROCESS_HARD_KEYS) {
 
 			mState = MetaKeyKeyListener.handleKeyUp(mState, keyCode, event);
@@ -194,9 +197,7 @@ public class HardKeyboard extends InputMethodService {
 		automata.reset();
 	}
 
-	/**
-	 * Helper function to commit any text being composed in to the editor.
-	 */
+
 	private void commitTyped(InputConnection inputConnection) {
 		if (mComposing.length() > 0) {
 			inputConnection.commitText(mComposing, mComposing.length());
@@ -204,22 +205,24 @@ public class HardKeyboard extends InputMethodService {
 		}
 	}
 
-	/**
-	 * Helper to update the shift state of our keyboard based on the initial
-	 * editor state.
-	 */
+
 	private void updateShiftKeyState(EditorInfo attr) {
+		
+
+		
+		Log.d("PhoneTopIme" , "shift1");
 		if (attr != null) {
+			Log.d("PhoneTopIme" , "shift2");
 			EditorInfo ei = getCurrentInputEditorInfo();
+			
 			if (ei != null && ei.inputType != EditorInfo.TYPE_NULL) {
+				Log.d("PhoneTopIme" , "shift3");
 				getCurrentInputConnection().getCursorCapsMode(attr.inputType);
 			}
 		}
 	}
 
-	/**
-	 * Helper to determine if a given character code is alphabetic.
-	 */
+
 	private boolean isAlphabet(int code) {
 		if (Character.isLetter(code)) {
 			return true;
@@ -228,9 +231,7 @@ public class HardKeyboard extends InputMethodService {
 		}
 	}
 
-	/**
-	 * Helper to send a key down / key up pair to the current editor.
-	 */
+
 	private void keyDownUp(int keyEventCode) {
 		getCurrentInputConnection().sendKeyEvent(
 				new KeyEvent(KeyEvent.ACTION_DOWN, keyEventCode));
@@ -238,11 +239,8 @@ public class HardKeyboard extends InputMethodService {
 				new KeyEvent(KeyEvent.ACTION_UP, keyEventCode));
 	}
 
-	/**
-	 * Helper to send a character to the editor as raw key events.
-	 */
 	private void sendKey(int keyCode) {
-		System.out.println("sendKey code"+keyCode);
+
 		switch (keyCode) {
 		case '\n':
 			keyDownUp(KeyEvent.KEYCODE_ENTER);
@@ -258,42 +256,44 @@ public class HardKeyboard extends InputMethodService {
 		}
 	}
 
-	// Implementation of KeyboardViewListener
-
 	public void onKey(int primaryCode, int[] keyCodes) {
-		System.out.println("code"+primaryCode);
-		if (isWordSeparator(primaryCode)) {
+		Log.d("PhoneTopIme", "onkey : " + primaryCode);
+	
+	   if (isWordSeparator(primaryCode)) {
 			// Handle separator
+
 			if (mComposing.length() > 0) {
 				commitTyped(getCurrentInputConnection());
 				if (hangulMode) {
+					Log.d("PhoneTopIme", "space2 : "+primaryCode);	
 					automata.reset();
 				}
 			}
 			sendKey(primaryCode);
 			updateShiftKeyState(getCurrentInputEditorInfo());
-		} else if (primaryCode == Keyboard.KEYCODE_DELETE) {
+		}
+		else if (primaryCode == Keyboard.KEYCODE_DELETE) {
 			handleBackspace();
 		} else if (primaryCode == Keyboard.KEYCODE_CANCEL) {
 			handleClose();
 			return;
 		} else {
-			handleCharacter(primaryCode, keyCodes);
+			handleCharacter(primaryCode, keyCodes); 
 		}
 	}
 
-	public void onText(CharSequence text) {
-		InputConnection ic = getCurrentInputConnection();
-		if (ic == null)
-			return;
-		ic.beginBatchEdit();
-		if (mComposing.length() > 0) {
-			commitTyped(ic);
-		}
-		ic.commitText(text, 0);
-		ic.endBatchEdit();
-		updateShiftKeyState(getCurrentInputEditorInfo());
-	}
+//	public void onText(CharSequence text) {
+//		InputConnection ic = getCurrentInputConnection();
+//		if (ic == null)
+//			return;
+//		ic.beginBatchEdit();
+//		if (mComposing.length() > 0) {
+//			commitTyped(ic);
+//		}
+//		ic.commitText(text, 0);
+//		ic.endBatchEdit();
+//		updateShiftKeyState(getCurrentInputEditorInfo());
+//	}
 
 	private void handleBackspace() {
 		final int length = mComposing.length();
@@ -305,9 +305,10 @@ public class HardKeyboard extends InputMethodService {
 				if (result != -1)
 					mComposing.append((char) result);
 			}
-
+			
 			getCurrentInputConnection().setComposingText(mComposing, 1);
-		} else if (length > 0) {
+		} else if (length > 0 ) {
+		
 			if (hangulMode) {
 				automata.reset();
 			}
@@ -317,6 +318,7 @@ public class HardKeyboard extends InputMethodService {
 			keyDownUp(KeyEvent.KEYCODE_DEL);
 		}
 		updateShiftKeyState(getCurrentInputEditorInfo());
+		
 	}
 
 	private void switchLanguage() {
@@ -337,27 +339,28 @@ public class HardKeyboard extends InputMethodService {
 		}
 
 		if (isAlphabet(primaryCode) && !hangulMode) {
-			System.out.println("handlec1"+primaryCode);
-//			mComposing.append((char) primaryCode);
-//			getCurrentInputConnection().setComposingText(mComposing, 1);
-			getCurrentInputConnection().commitText(
-			String.valueOf((char) primaryCode), 1);
+	
+			mComposing.append((char) primaryCode);
+			getCurrentInputConnection().setComposingText(mComposing, 1);
+			getCurrentInputConnection().commitText(String.valueOf((char) primaryCode), 1);
 			updateShiftKeyState(getCurrentInputEditorInfo());
 		} else if (hangulMode) {
+		
 			InputConnection ic = getCurrentInputConnection();
 			int length = mComposing.length();
 
 			ic.beginBatchEdit();
 			if (automata.getBuffer() != -1 && 0 < length)
 				mComposing.delete(length - 1, length);
-			int ret[] = automata.appendCharacter(HangulAutomata
-					.toHangulCode(primaryCode));
+			int ret[] = automata.appendCharacter(HangulAutomata.toHangulCode(primaryCode));
 
 			for (int i = 0; i < ret.length - 1; i++) {
 				if (ret[i] != -1)
 					mComposing.append((char) ret[i]);
 			}
+			Log.d("PhoneTopIme" , mComposing.toString());
 			ic.commitText(mComposing, 1);
+			
 			mComposing.setLength(0);
 			if (ret[2] != -1) {
 				mComposing.append((char) ret[2]);
@@ -365,7 +368,7 @@ public class HardKeyboard extends InputMethodService {
 			}
 			ic.endBatchEdit();
 		} else {
-			System.out.println("handlec2"+primaryCode);
+			
 //			mComposing.append((char) primaryCode);
 //			getCurrentInputConnection().setComposingText(mComposing, 1);
 			getCurrentInputConnection().commitText(
