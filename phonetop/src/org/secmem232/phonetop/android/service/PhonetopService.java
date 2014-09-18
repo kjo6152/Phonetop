@@ -124,7 +124,8 @@ public class PhonetopService extends Service {
 		try {
 			if (client != null)
 				client.close();
-			server.close();
+			if (server != null)
+				server.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -147,14 +148,14 @@ public class PhonetopService extends Service {
 	public void onConfigurationChanged(Configuration newConfig) {
 		// TODO Auto-generated method stub
 		super.onConfigurationChanged(newConfig);
-		return;
-//         switch(newConfig.orientation){
-//            case Configuration.ORIENTATION_LANDSCAPE:
-//            	inputEventHandler.setEventType(PhonetopInputHandler.INPUT_MONITOR_LANDSCAPE);
-//            	break;
-//            case Configuration.ORIENTATION_PORTRAIT: 
-//            	inputEventHandler.setEventType(PhonetopInputHandler.INPUT_MONITOR_PORTRAIT);
-//            	break;
-//         }
+			if(inputEventHandler==null)return;
+         switch(newConfig.orientation){
+            case Configuration.ORIENTATION_LANDSCAPE:
+            	inputEventHandler.setEventType(PhonetopInputHandler.INPUT_MONITOR_LANDSCAPE);
+            	break;
+            case Configuration.ORIENTATION_PORTRAIT: 
+            	inputEventHandler.setEventType(PhonetopInputHandler.INPUT_MONITOR_PORTRAIT);
+            	break;
+         }
 	}
 }
