@@ -147,13 +147,14 @@ public class PhonetopService extends Service {
 	public void onConfigurationChanged(Configuration newConfig) {
 		// TODO Auto-generated method stub
 		super.onConfigurationChanged(newConfig);
-         switch(newConfig.orientation){
-            case Configuration.ORIENTATION_LANDSCAPE:
-            	inputEventHandler.setEventType(PhonetopInputHandler.INPUT_MONITOR_LANDSCAPE);
-            	break;
-            case Configuration.ORIENTATION_PORTRAIT: 
-            	inputEventHandler.setEventType(PhonetopInputHandler.INPUT_MONITOR_PORTRAIT);
-            	break;
-         }
+		return;
+//         switch(newConfig.orientation){
+//            case Configuration.ORIENTATION_LANDSCAPE:
+//            	inputEventHandler.setEventType(PhonetopInputHandler.INPUT_MONITOR_LANDSCAPE);
+//            	break;
+//            case Configuration.ORIENTATION_PORTRAIT: 
+//            	inputEventHandler.setEventType(PhonetopInputHandler.INPUT_MONITOR_PORTRAIT);
+//            	break;
+//         }
 	}
 }
