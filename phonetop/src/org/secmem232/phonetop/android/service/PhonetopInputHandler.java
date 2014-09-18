@@ -250,9 +250,13 @@ public class PhonetopInputHandler {
 				} else if (code == 8) {
 					if (value > 0) {// 휠아래로
 //						for(int i=0;i<=this.wheelSpeed;i++)
+						inputHandler.sendEvent(3, 0, 1080/2);
+						inputHandler.sendEvent(3, 1, 1920/2);
 						inputHandler.wheelDown(1080/2, 1920/2);
 					} else if (value < 0) {// 휠위로
 //						for(int i=0;i<=this.wheelSpeed;i++)
+						inputHandler.sendEvent(3, 0, 1080/2);
+						inputHandler.sendEvent(3, 1, 1920/2);
 						inputHandler.wheelUp(1080/2, 1920/2);
 					}
 					return;
