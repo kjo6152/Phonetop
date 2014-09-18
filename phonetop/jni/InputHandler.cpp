@@ -11,6 +11,8 @@
 #define ABS_MT_POSITION_Y 0x01
 #define SWIPE_GAP 200
 #define SWIPE_COUNT 2
+#define DISPLAY_VERTICAL 0
+#define DISPLAY_HORIZONTAL 1
 extern int inputFd;
 
 /*
@@ -65,15 +67,22 @@ JNIEXPORT void JNICALL Java_org_secmem232_phonetop_android_natives_InputHandler_
 JNIEXPORT void JNICALL Java_org_secmem232_phonetop_android_natives_InputHandler_sendEventByLow(JNIEnv *env, jobject thiz, jbyteArray){
 }
 
-JNIEXPORT jint JNICALL Java_org_secmem232_phonetop_android_natives_InputHandler_wheelDown(JNIEnv* env,jobject thiz, int x, int y){
-	   int i;
+JNIEXPORT jint JNICALL Java_org_secmem232_phonetop_android_natives_InputHandler_wheelDown(JNIEnv* env,jobject thiz, int x, int y, int mode){
+	   if(mode==DISPLAY_HORIZONTAL){
+	   }
+		int i;
 	   sendNativeEvent(inputFd, EV_ABS, ABS_MT_TRACKING_ID, 1);
 	   sendNativeEvent(inputFd, EV_KEY, BTN_TOUCH, 1);
 	   for(i = 0; i < SWIPE_COUNT; i++) {
-		  sendNativeEvent(inputFd, EV_ABS, ABS_MT_POSITION_X, x);
-		  sendNativeEvent(inputFd, EV_ABS, ABS_MT_POSITION_Y, y+(i*SWIPE_GAP));
+		   if(mode==DISPLAY_HORIZONTAL){
+				 sendNativeEvent(inputFd, EV_ABS, ABS_MT_POSITION_X, x-(i*SWIPE_GAP));
+				 sendNativeEvent(inputFd, EV_ABS, ABS_MT_POSITION_Y, y);
+		   }else{
+			     sendNativeEvent(inputFd, EV_ABS, ABS_MT_POSITION_X, x);
+			   	 sendNativeEvent(inputFd, EV_ABS, ABS_MT_POSITION_Y, y+(i*SWIPE_GAP));
+		   }
 		  sendNativeEvent(inputFd, EV_SYN, SYN_REPORT, 0);
-		  usleep(70000);
+		  usleep(50000);
 	   }
 	   sendNativeEvent(inputFd, EV_ABS, ABS_MT_TRACKING_ID, -1);
 	   sendNativeEvent(inputFd, EV_KEY, BTN_TOUCH, 0);
@@ -82,15 +91,20 @@ JNIEXPORT jint JNICALL Java_org_secmem232_phonetop_android_natives_InputHandler_
 	   return 0;
 }
 
-JNIEXPORT jint JNICALL Java_org_secmem232_phonetop_android_natives_InputHandler_wheelUp(JNIEnv* env,jobject thiz, int x, int y){
+JNIEXPORT jint JNICALL Java_org_secmem232_phonetop_android_natives_InputHandler_wheelUp(JNIEnv* env,jobject thiz, int x, int y, int mode){
 	   int i;
 	   sendNativeEvent(inputFd, EV_ABS, ABS_MT_TRACKING_ID, 1);
 	   sendNativeEvent(inputFd, EV_KEY, BTN_TOUCH, 1);
 	   for(i = 0; i < SWIPE_COUNT; i++) {
-		  sendNativeEvent(inputFd, EV_ABS, ABS_MT_POSITION_X, x);
-		  sendNativeEvent(inputFd, EV_ABS, ABS_MT_POSITION_Y, y-(i*SWIPE_GAP));
+		   if(mode==DISPLAY_HORIZONTAL){
+				 sendNativeEvent(inputFd, EV_ABS, ABS_MT_POSITION_X, x+(i*SWIPE_GAP));
+				 sendNativeEvent(inputFd, EV_ABS, ABS_MT_POSITION_Y, y);
+		   }else{
+				 sendNativeEvent(inputFd, EV_ABS, ABS_MT_POSITION_X, x);
+				 sendNativeEvent(inputFd, EV_ABS, ABS_MT_POSITION_Y, y-(i*SWIPE_GAP));
+		   }
 		  sendNativeEvent(inputFd, EV_SYN, SYN_REPORT, 0);
-		  usleep(70000);
+		  usleep(50000);
 	   }
 	   sendNativeEvent(inputFd, EV_ABS, ABS_MT_TRACKING_ID, -1);
 	   sendNativeEvent(inputFd, EV_KEY, BTN_TOUCH, 0);

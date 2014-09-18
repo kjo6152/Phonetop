@@ -153,7 +153,7 @@ public class InputHandler {
 	
 	public native void sendEventByLow(byte[] buf);
 	
-	public native int wheelDown(int x,int y);
+	public native int wheelDown(int x,int y,int mode);
 	
-	public native int wheelUp(int x,int y);
+	public native int wheelUp(int x,int y,int mode);
 }

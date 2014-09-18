@@ -32,7 +32,7 @@ public class DisplayRotation {
 			windowType, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
 					| WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
 			PixelFormat.RGBA_8888);
-	int OrientationIndex;
+	static int OrientationIndex;
 
 	
 	public DisplayRotation(Context context){
