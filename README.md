@@ -18,17 +18,17 @@ How To Build
    - Change source in 'frameworks/frameworks' to '<AOSP>/frameworks'
    - Build android framework
 
- 2) Android Application ( 4.4.2 , Need rooting to input sharing )
-   a. Import project to eclipse
-   b. Change ADB location in 'phonetop/systemapp/createSystemApp.sh'
-   c. Check environment path about java
-   d. Clean and build project then application install
+ - Android Application ( 4.4.2 , Need rooting to input sharing )
+   - Import project to eclipse
+   - Change ADB location in 'phonetop/systemapp/createSystemApp.sh'
+   - Check environment path about java
+   - Clean and build project then application install
    
- 3) Ubuntu Application ( Ubuntu 14.04, ffmpeg 2.3 )
-   a. ./configure and make in ffmpeg 2.3 directory
-   b. move 'phonetop' file to phonetopclient directory
-   c. make in phonetopclient directory
-   d. ./runPhonetopClient.sh
+ - Ubuntu Application ( Ubuntu 14.04, ffmpeg 2.3 )
+   - ./configure and make in ffmpeg 2.3 directory
+   - move 'phonetop' file to phonetopclient directory
+   - make in phonetopclient directory
+   - ./runPhonetopClient.sh
  
 3. Testing
  - Android application & framework : Nexus5
