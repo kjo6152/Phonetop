@@ -12,11 +12,11 @@ How To Build
 ========
 1. Environment : Android framework 4.4.2 (Nexus5), Ubuntu 14.04 LTS, FFMpeg 2.3
 2. Build
- 1) Android framework ( 4.4.2 )
-   a. Download android framework 4.4.2
-   b. Add binary in binaries directory and show 'https://github.com/kjo6152/Phonetop/tree/master/binaries/usage'
-   c. Change source in 'frameworks/frameworks' to '<AOSP>/frameworks'
-   d. Build android framework
+ - Android framework ( 4.4.2 )
+   - Download android framework 4.4.2
+   - Add binary in binaries directory and show 'https://github.com/kjo6152/Phonetop/tree/master/binaries/usage'
+   - Change source in 'frameworks/frameworks' to '<AOSP>/frameworks'
+   - Build android framework
 
  2) Android Application ( 4.4.2 , Need rooting to input sharing )
    a. Import project to eclipse
@@ -33,5 +33,5 @@ How To Build
 3. Testing
  - Android application & framework : Nexus5
  - Linux application : Desktop, Odroid XU 
- - 
+
 4. Usage
