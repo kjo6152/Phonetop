@@ -1,6 +1,6 @@
 Phonetop
 ========
-How To Build
+How To Build</br>
 1. Environment : Android framework 4.4.2 (Nexus5), Ubuntu 14.04 LTS, FFMpeg 2.3
 2. Build
  1) Android framework
