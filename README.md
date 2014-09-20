@@ -12,7 +12,7 @@ How To Build
 ========
 ### Environment
  - Android framework 4.4.2 (Nexus5), Ubuntu 14.04 LTS, FFMpeg 2.3
- - 
+
 ### Build
  1. Android framework ( 4.4.2 )
    - Download android framework 4.4.2
