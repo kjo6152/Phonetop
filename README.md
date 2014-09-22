@@ -26,14 +26,15 @@ How To Build
    - Check environment path about java
    - Clean and build project then application install
    
- 3. Ubuntu Application ( Ubuntu 14.04, ffmpeg 2.3 )
-   - ./configure and make in ffmpeg 2.3 directory
-   - move 'phonetop' file to phonetopclient directory
-   - make in phonetopclient directory
-   - ./runPhonetopClient.sh
+ 3. Linux Application ( Ubuntu 14.04, ffmpeg 2.3 )
+   - './configure' and 'make' in 'phonetopclient/ffmpeg 2.3' directory
+   - 'make new in' 'phonetopclient' directory
  
 ### Testing
  - Android application & framework : Nexus5
  - Linux application : Desktop, Odroid XU 
 
 ### Usage
+ - Run android application and switch toogle.
+ - If show message '실행중' then run linux application thought './runPhonetopClient.sh' in phonetopclient directory.
+ - You can see monitor that show android display.
