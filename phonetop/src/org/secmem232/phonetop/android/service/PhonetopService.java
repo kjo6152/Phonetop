@@ -70,6 +70,7 @@ public class PhonetopService extends Service {
 
 
 		dr = new DisplayRotation(this);
+		dr.setDeviceOrientation(ORIENTATION_PORTRAIT);
 		mPhonetopServiceBinder = new PhonetopServiceBinder(this);
 		mPhonetopDisplayManager = new PhonetopDisplayManager(this);
 		mPheontopTetheringManager = new PhonetopTetheringManager(this);
