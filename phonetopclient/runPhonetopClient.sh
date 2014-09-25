@@ -1,20 +1,21 @@
 #!/bin/bash
 #This sciprt is run Phonetop client
 
-export XAUTHORITY=/home/odroid/.Xauthority
-export DISPLAY=:0.0
+#export XAUTHORITY=/home/odroid/.Xauthority
+#export DISPLAY=:0.0
 
 echo 'PhoneTop Client Running Wait...'
 #Set variable
 DIR=$(dirname $0)
-PROCESS_NAME=phonetopclient
-PROCESS_NAME2=phonetop
-SCRIPT_PATH=$DIR/$PROCESS_NAME
-SCRIPT_PATH2=$DIR/$PROCESS_NAME2
+CLIENT_NAME=phonetopclient
+PLAYER_NAME=phonetop
+CLIENT_PATH=$DIR/$CLIENT_NAME
+PLAYER_PATH=$DIR/ffmpeg-2.3/$PLAYER_NAME
+
 fork(){
 # Step 1. If old Phonetop client is running, kill old process
-pkill -9 $PROCESS_NAME
-pkill -9 $PROCESS_NAME2
+pkill -9 $CLIENT_NAME
+pkill -9 $PLAYER_NAME
 sleep 2
 # Step 2. Check usb0 iface is ready
 usb0=""
@@ -37,8 +38,8 @@ ifconfig usb0 192.168.42.55 up
 #Following script is run Phonetop client
 #If you run via udev, you should execute to absolute path
 mkfifo /tmp/phonetop_pipe
-$SCRIPT_PATH2 rtp://192.168.42.129:24030 &
-$SCRIPT_PATH &
+$PLAYER_PATH rtp://192.168.42.129:24030 &
+$CLIENT_NAME &
 exit
 }
 fork &
