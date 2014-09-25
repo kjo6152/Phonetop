@@ -1725,7 +1725,7 @@ final class ActivityStack {
          
         	 BufferedWriter file=null;
            try {
-              ////////////////////////////////////////////////////////////////
+             
          	   boolean existPackage=false;
               BufferedReader in = new BufferedReader(new FileReader("/data/data/countingPackage.txt"));
               String s;
@@ -1736,21 +1736,20 @@ final class ActivityStack {
                 if(p[0].equals(PkName)){ // countingPackage.txt 에 패키지명이 있으면 count만 증가시켜서 수정.
                 		double packageCount = Double.parseDouble(p[1]) +0.001;
                 		existPackage = true;
-                		Log.d("test2", "p[0]: " + p[0]+ " , p[1]: " + p[1] + ", packageCount : " + packageCount);
+                		
                 	  	dummy += PkName+"/" + packageCount+"\n";
                 	}else{
                    	  dummy += (s+"\n");
                   	}
                  }
-              Log.d("test2", "dummy:" + dummy);
-              in.close();
               
-              ////////////////////////////////////////////////////////////////
+              in.close();
+            
               if(existPackage==true){
             	  
             	  file = new BufferedWriter(new FileWriter("/data/data/countingPackage.txt", false));
              	  file.write(dummy);
-               file.close();
+                file.close();
               	}
               else if(existPackage == false){ // countingpackage.txt 에 패키지명이 없으면 새로추가. 
             	   file = new BufferedWriter(new FileWriter("/data/data/countingPackage.txt", true)); 
@@ -1759,7 +1758,7 @@ final class ActivityStack {
            	   file.newLine();
            	   file.close();
               	}
-              ///////////////////////////////////////////////////////////////////
+            
             } catch (IOException e) {
           	   Log.d("test3",""+e);
              }

@@ -468,6 +468,7 @@ public class Resources{
 	 *
 	 * @return The styled text array associated with the resource.
 	 */
+	
 	public CharSequence[] getTextArray(int id) throws NotFoundException {
 		CharSequence[] res = mAssets.getResourceTextArray(id);
 		if (res != null) {
@@ -1579,7 +1580,7 @@ public class Resources{
 			 */
 			int density = dpiChange();	
 			
-			Log.d("test6 ", "density : "+density);
+			Log.d("SystemUiChange ", "density : "+density);
 			if (config != null) {
 				mTmpConfig.setTo(config);
 				Log.d("test5 ", "density 1 : "+density);
@@ -1676,7 +1677,6 @@ public class Resources{
 					while(startPhoneTopFis.read(data)!=-1){}
 					startPhoneTopFis.close();
 
-					Log.d("test5", "StartPhoneTop :" + new String(data));
 
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -1696,7 +1696,7 @@ public class Resources{
 						Element sElement = (Element) startList.item(0);
 						Node startName = sElement.getFirstChild();
 						String startNo = startName.getNodeValue();
-						Log.d("test5 " , "startNo : " + startNo); 
+ 
 						if(startNo.equals("1")){
 							File runPackageFile = new File("/data/data/runningPackage.txt");
 							data = null ;
@@ -1712,7 +1712,6 @@ public class Resources{
 										while(runPackageFis.read(data)!=-1){}
 										runPackageFis.close();
 										startPackage = new String(data);
-										Log.d("test5", "package Resource:  " + new String(data));
 
 									} catch (IOException e1) {
 										// TODO Auto-generated catch block
@@ -1725,7 +1724,6 @@ public class Resources{
 								}
 
 							}else{
-
 								Log.d("test5", "file 없어 ");
 							}
 							
@@ -1739,8 +1737,6 @@ public class Resources{
 										data = new byte[changeDpiFis.available()];
 										while(changeDpiFis.read(data)!=-1){}
 										changeDpiFis.close();
-
-										Log.d("test4", "SharedPreference :" + new String(data));
 
 									} catch (IOException e1) {
 										// TODO Auto-generated catch block
@@ -1764,13 +1760,9 @@ public class Resources{
 												Node name = pElement.getFirstChild();
 												String packgeName = pElement.getAttribute("name");
 												String packgeDensity = name.getNodeValue();
-												Log.d("test5" ,"node attribute : "+ packgeName);
-												Log.d("test5" ,"node value : "+ packgeDensity);
-												Log.d("test5" ,"startPackage: "+ startPackage);
+
 												// 패키지명별로 density 값을 다르게 적용.
 												if(packgeName.equals(startPackage)){
-
-													Log.d("test5 " ,"startPackage :" + startPackage + " - Dpi : " + packgeDensity  );
 													density = Integer.parseInt(packgeDensity);
 													changePackage = false;
 													break;
@@ -1811,7 +1803,7 @@ public class Resources{
 
 
 						}else{
-							Log.d("test5", "StartNo : 0"); 							
+ 							
 							density = 480;
 							return density;
 						}

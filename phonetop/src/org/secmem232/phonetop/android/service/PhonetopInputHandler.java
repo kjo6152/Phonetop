@@ -231,8 +231,7 @@ public class PhonetopInputHandler {
 				} else if(code == KEY_F3){
 					inputHandler.sendEvent(type, VOLUME_UP, value);
 				} else if(code == KEY_F4){
-					System.out.println("POWER: " + KEY_POWER);
-					inputHandler.sendEvent(type, KEY_POWER, value);
+					
 				} else if(code == 41){
 					inputHandler.sendEvent(type,399, value);
 				} else {
