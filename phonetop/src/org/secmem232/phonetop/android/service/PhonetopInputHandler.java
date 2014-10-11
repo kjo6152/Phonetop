@@ -12,6 +12,7 @@ import org.secmem232.phonetop.android.util.Util;
 
 import android.app.Service;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.util.Log;
 import android.view.WindowManager;
 
@@ -245,7 +246,8 @@ public class PhonetopInputHandler {
 					x = buffer.getInt(0);
 					y = buffer.getInt(4);
 					inputHandler.sendEvent(3, 0, x);
-					inputHandler.sendEvent(3, 1, (int)((double)y*0.91));
+					inputHandler.sendEvent(3, 1, (int)((double)y*0.93));
+					
 				} else if (code == 8) {
 					if (value > 0) {// 휠아래로
 //						for(int i=0;i<=this.wheelSpeed;i++)
