@@ -38,3 +38,11 @@ How To Build
  - Run android application and switch toogle.
  - If show message '실행중' then run linux application thought './runPhonetopClient.sh' in phonetopclient directory.
  - You can see monitor that show android display.
+
+##Demonstration
+<iframe width="560" height="315" src="https://www.youtube.com/embed/HkpBwy3axSw" frameborder="0" allowfullscreen></iframe>
+
+##BLINK Members
+- Jiwon Kim (김지원)
+- Jinyoung Lee (이진영)
+- Youngsik Lee (함영식)
