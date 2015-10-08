@@ -40,7 +40,7 @@ How To Build
  - You can see monitor that show android display.
 
 ##Demonstration
-[![Blink1](//i.ytimg.com/vi_webp/HkpBwy3axSw/mqdefault.webp)](https://youtu.be/HkpBwy3axSw "Go into the Blink!")
+[![Phonetop](http://i.ytimg.com/vi_webp/HkpBwy3axSw/mqdefault.webp)](https://youtu.be/HkpBwy3axSw "Go into the Blink!")
 - Click the upper image if you want to watch a demo video!
 
 ##BLINK Members
