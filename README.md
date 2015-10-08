@@ -40,7 +40,8 @@ How To Build
  - You can see monitor that show android display.
 
 ##Demonstration
-<iframe width="560" height="315" src="https://www.youtube.com/embed/HkpBwy3axSw" frameborder="0" allowfullscreen></iframe>
+[![Blink1](//i.ytimg.com/vi_webp/HkpBwy3axSw/mqdefault.webp)](https://youtu.be/HkpBwy3axSw "Go into the Blink!")
+- Click the upper image if you want to watch a demo video!
 
 ##BLINK Members
 - Jiwon Kim (김지원)
